@@ -27,7 +27,7 @@ const registrationSchema = z
       .string()
       .min(1, 'Please confirm your password'),
     role: z.enum(['student', 'recruiter', 'admin'], {
-      errorMap: () => ({ message: 'Please select a valid role' }),
+      error: 'Please select a valid role',
     }),
     graduationYear: z
       .string()
@@ -88,7 +88,7 @@ export default function Registration() {
 
     if (!result.success) {
       
-      setError(result.error.errors[0].message);
+      setError(result.error.issues[0].message);
       return;
     }
 
