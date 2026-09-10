@@ -44,13 +44,10 @@ export default function Login() {
             if (response.data.status) {
             await handleRole();
             }
-        } catch (error: any) {
-            setError(
-            error.response?.data?.message || error,
-            );
-        } finally {
-            setLoading(false);
-        }
+        } catch (error) {
+          alert("Error Details: " + (error.response?.data?.message || error.message)); finally {
+                    setLoading(false);
+                }
     }
 
     const handleRole = async () => {
