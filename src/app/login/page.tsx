@@ -46,7 +46,7 @@ export default function Login() {
             }
         } catch (error: any) {
             setError(
-            error.response?.data?.message || 'Login failed',
+            error.response?.data?.message || error,
             );
         } finally {
             setLoading(false);
