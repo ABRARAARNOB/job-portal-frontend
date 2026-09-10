@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://job-portal-backend-1-yib6.onrender.com',
   withCredentials: true,
 });

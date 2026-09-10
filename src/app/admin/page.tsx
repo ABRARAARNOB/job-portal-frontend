@@ -55,8 +55,8 @@ export default function AdminDashboard() {
   const fetchDashboard = async () => {
     setLoading(true);
     try {
-      const userRes = await api.get('https://job-portal-backend-1-yib6.onrender.com/admin/users');
-      const jobRes = await api.get('https://job-portal-backend-1-yib6.onrender.com/admin/jobs');
+      const userRes = await api.get('/admin/users');
+      const jobRes = await api.get('/admin/jobs');
 
       const allUsers = userRes.data;
 
@@ -76,7 +76,7 @@ export default function AdminDashboard() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await api.get('https://job-portal-backend-1-yib6.onrender.com/admin/users');
+      const response = await api.get('/admin/users');
       console.log('Users response:', response.data);
       setUsers(response.data);
     } catch (error: any) {
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
     if (!confirm('Are you sure you want to delete this user?')) return;
 
     try {
-      await api.delete(`https://job-portal-backend-1-yib6.onrender.com/admin/users/${id}`);
+      await api.delete(`/admin/users/${id}`);
       setSuccess('User deleted successfully');
       setUsers((prev) => prev.filter((u) => u.id !== id));
       setTimeout(() => setSuccess(''), 2000);
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const response = await api.get('https://job-portal-backend-1-yib6.onrender.com/admin/jobs');
+      const response = await api.get('/admin/jobs');
       console.log('Jobs response:', response.data);
       setJobs(response.data);
     } catch (error: any) {
@@ -116,7 +116,7 @@ export default function AdminDashboard() {
     if (!confirm('Are you sure you want to delete this job?')) return;
 
     try {
-      await api.delete(`https://job-portal-backend-1-yib6.onrender.com/admin/jobs/${id}`);
+      await api.delete(`/admin/jobs/${id}`);
       setSuccess('Job deleted successfully');
       setJobs((prev) => prev.filter((j) => j.id !== id));
       setTimeout(() => setSuccess(''), 2000);
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
   const fetchApplications = async () => {
     setLoading(true);
     try {
-      const response = await api.get('https://job-portal-backend-1-yib6.onrender.com/admin/applications');
+      const response = await api.get('/admin/applications');
       console.log('Applications response:', response.data);
       setApplications(response.data);
     } catch (error: any) {

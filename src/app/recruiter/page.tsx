@@ -16,7 +16,7 @@ export default function Page() {
     useEffect(() => {
         const fetchPostedJobs = async () => {
             try {
-                const response = await api.get<Job[]>('https://job-portal-backend-1-yib6.onrender.com/job');
+                const response = await api.get<Job[]>('/job');
 
                 setPostedJobs(response.data);
             } catch (error) {

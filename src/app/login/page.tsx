@@ -34,7 +34,7 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await api.post('https://job-portal-backend-1-yib6.onrender.com/auth/login', {
+            const response = await api.post('/auth/login', {
             email,
             password,
             });
@@ -55,7 +55,7 @@ export default function Login() {
 
     const handleRole = async () => {
   try {
-    const res = await api.get('https://job-portal-backend-1-yib6.onrender.com/auth/me');
+    const res = await api.get('/auth/me');
 
     console.log('called');
     console.log('User response:', res.data);

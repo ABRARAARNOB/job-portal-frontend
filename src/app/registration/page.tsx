@@ -105,7 +105,7 @@ export default function Registration() {
       };
 
       const response = await api.post(
-        'https://job-portal-backend-1-yib6.onrender.com/auth/register',
+        '/auth/register',
         payload
       );
 
