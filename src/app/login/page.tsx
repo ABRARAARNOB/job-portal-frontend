@@ -24,14 +24,14 @@ export default function Login() {
     const [loginResponse, setLoginResponse] = useState<LoginResponse | null>(null);
     const [error, setError] = useState<string>('');
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
-    async function handleLogin(
-        e: React.FormEvent<HTMLFormElement>,
-        ) {
+    async function handleLogin(e :any) {
         e.preventDefault();
 
         setLoginResponse(null);
         setError('');
+        setLoading(true);
 
         try {
             const response = await api.post('https://job-portal-backend-1-yib6.onrender.com/auth/login', {
@@ -48,6 +48,8 @@ export default function Login() {
             setError(
             error.response?.data?.message || 'Login failed',
             );
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -73,17 +75,21 @@ useEffect(() => {
   }
 }, [loginResponse, user?.role, router]);
 
+useEffect(() => {
+  if (loginResponse?.status && user?.role === 'admin') {
+    router.push('/admin');
+  }
+}, [loginResponse, user?.role, router]);
+
 
     return (
         <div className="flex min-h-screen flex-col bg-[#f7f6fd] px-4 py-10">
-            {/* Brand / wordmark */}
             <div className="text-center">
                 <span className="text-2xl font-extrabold tracking-tight text-indigo-600">
                     UniCareer
                 </span>
             </div>
 
-            {/* Centered login card */}
             <div className="flex flex-1 items-center justify-center">
                 <div className="w-full max-w-md rounded-2xl border-l-4 border-indigo-600 bg-white p-8 shadow-[0_20px_45px_-15px_rgba(60,50,150,0.25)] sm:p-10">
                     <div className="text-center">
@@ -104,34 +110,15 @@ useEffect(() => {
                                 Email Address
                             </label>
 
-                            <div className="relative">
-                                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="h-5 w-5 text-gray-400"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-                                        />
-                                    </svg>
-                                </span>
-
-                                <input
-                                    id="email"
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="student@university.edu"
-                                    required
-                                    className="w-full rounded-lg border border-gray-200 py-2.5 pl-10 pr-3 text-gray-700 placeholder-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-                                />
-                            </div>
+                            <input
+                                id="email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="student@university.edu"
+                                required
+                                className="w-full rounded-lg border border-gray-200 py-2.5 px-3 text-gray-700 placeholder-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            />
                         </div>
 
                         <div className="mb-2">
@@ -142,36 +129,17 @@ useEffect(() => {
                                 Password
                             </label>
 
-                            <div className="relative">
-                                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="h-5 w-5 text-gray-400"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-                                        />
-                                    </svg>
-                                </span>
-
-                                <input
-                                    id="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
-                                    placeholder="Enter your password"
-                                    required
-                                    className="w-full rounded-lg border border-gray-200 py-2.5 pl-10 pr-3 text-gray-700 placeholder-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-                                />
-                            </div>
+                            <input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) =>
+                                    setPassword(e.target.value)
+                                }
+                                placeholder="Enter your password"
+                                required
+                                className="w-full rounded-lg border border-gray-200 py-2.5 px-3 text-gray-700 placeholder-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            />
                         </div>
 
                         <div className="mb-6 text-right">
@@ -185,9 +153,10 @@ useEffect(() => {
 
                         <button
                             type="submit"
-                            className="w-full rounded-lg bg-[#3b28c8] py-3 font-semibold text-white transition hover:bg-[#31209f]"
+                            disabled={loading}
+                            className="w-full rounded-lg bg-[#3b28c8] py-3 font-semibold text-white transition hover:bg-[#31209f] disabled:opacity-60"
                         >
-                            Login
+                            {loading ? 'Logging in...' : 'Login'}
                         </button>
                     </form>
 
