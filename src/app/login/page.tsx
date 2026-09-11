@@ -34,7 +34,7 @@ export default function Login() {
         setError('');
 
         try {
-            const response = await api.post('https://job-portal-backend-1-yib6.onrender.com/auth/login', {
+            const response = await api.post('/auth/login', {
             email,
             password,
             });
@@ -52,24 +52,24 @@ export default function Login() {
     }
 
     const handleRole = async () => {
-  try {
-    const res = await api.get('https://job-portal-backend-1-yib6.onrender.com/auth/me');
+        try {
+            const res = await api.get('/auth/me');
 
-    console.log('called');
-    console.log('User response:', res.data);
-
-    setUser(res.data);
-  } catch (error: any) {
-    console.error(
-      'Failed to get user:',
-      error.response?.data || error.message,
-    );
-  }
-};
+            setUser(res.data);
+        } catch (error: any) {
+            console.error(
+            'Failed to get user:',
+            error.response?.data || error.message,
+            );
+        }
+    };
 
 useEffect(() => {
   if (loginResponse?.status && user?.role === 'recruiter') {
     router.push('/recruiter');
+  }
+  else if (loginResponse?.status && user?.role === 'student') {
+    router.push('/student');
   }
 }, [loginResponse, user?.role, router]);
 
