@@ -54,24 +54,31 @@ export default function Login() {
     }
 
     const handleRole = async () => {
+
+        try {
+            const res = await api.get('/auth/me');
+
   try {
     const res = await api.get('/auth/me');
 
     console.log('called');
     console.log('User response:', res.data);
 
-    setUser(res.data);
-  } catch (error: any) {
-    console.error(
-      'Failed to get user:',
-      error.response?.data || error.message,
-    );
-  }
-};
+            setUser(res.data);
+        } catch (error: any) {
+            console.error(
+            'Failed to get user:',
+            error.response?.data || error.message,
+            );
+        }
+    };
 
 useEffect(() => {
   if (loginResponse?.status && user?.role === 'recruiter') {
     router.push('/recruiter');
+  }
+  else if (loginResponse?.status && user?.role === 'student') {
+    router.push('/student');
   }
 }, [loginResponse, user?.role, router]);
 
