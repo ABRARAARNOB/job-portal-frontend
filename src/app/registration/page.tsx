@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { z } from 'zod';
@@ -32,7 +32,10 @@ const registrationSchema = z
     graduationYear: z
       .string()
       .min(1, 'Graduation year is required')
-      .refine((val) => !isNaN(Number(val)) && Number(val) >= 1950 && Number(val) <= 2100, {
+      .refine((val) => {
+        const year = val.includes('-') ? parseInt(val.split('-')[0], 10) : Number(val);
+        return !isNaN(year) && year >= 1950 && year <= 2100;
+      }, {
         message: 'Graduation year must be a valid year (e.g. 2026)',
       }),
     bio: z
@@ -68,9 +71,7 @@ export default function Registration() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = ( e: any ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -78,7 +79,7 @@ export default function Registration() {
     }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -97,17 +98,21 @@ export default function Registration() {
     try {
       
       const validatedData = result.data;
+      const parsedYear = validatedData.graduationYear.includes('-')
+        ? parseInt(validatedData.graduationYear.split('-')[0], 10)
+        : Number(validatedData.graduationYear);
+
       const payload = {
         fullName: validatedData.fullName,
         email: validatedData.email,
         password: validatedData.password,
         role: validatedData.role,
-        graduationYear: Number(validatedData.graduationYear),
+        graduationYear: parsedYear,
         ...(validatedData.bio?.trim() ? { bio: validatedData.bio.trim() } : {}),
       };
 
       const response = await api.post(
-        'https://job-portal-backend-1-yib6.onrender.com/auth/register',
+        '/auth/register',
         payload
       );
 
@@ -132,7 +137,7 @@ export default function Registration() {
     <div className="flex min-h-screen items-center justify-center bg-[#eef2f8] px-4 py-8">
       <div className="flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl md:flex-row">
         
-        {/* Left Blue Panel */}
+      
         <div className="flex flex-col justify-between bg-[#2f27ce] p-8 text-white md:w-5/12 md:p-10">
           <div>
             <h1 className="text-2xl font-bold leading-snug md:text-3xl">
@@ -150,7 +155,7 @@ export default function Registration() {
           </div>
         </div>
 
-        {/* Right White Form Panel */}
+        
         <div className="flex-1 bg-white p-8 md:p-10">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
@@ -162,7 +167,7 @@ export default function Registration() {
           </div>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            {/* Full Name */}
+             
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1">
                 Full Name
@@ -177,7 +182,7 @@ export default function Registration() {
               />
             </div>
 
-            {/* Email Address */}
+             
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1">
                 Email Address
@@ -192,7 +197,7 @@ export default function Registration() {
               />
             </div>
 
-            {/* Password */}
+             
             <div>
               <div className="flex justify-between items-center mb-1">
                 <label className="block text-xs font-semibold text-gray-700">
@@ -216,7 +221,7 @@ export default function Registration() {
               />
             </div>
 
-            {/* Confirm Password */}
+             
             <div>
               <div className="flex justify-between items-center mb-1">
                 <label className="block text-xs font-semibold text-gray-700">
@@ -240,7 +245,7 @@ export default function Registration() {
               />
             </div>
 
-            {/* Role & Graduation Year */}
+            
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">
@@ -263,17 +268,16 @@ export default function Registration() {
                   Graduation Year
                 </label>
                 <input
-                  type="number"
+                  type="date"
                   name="graduationYear"
                   value={formData.graduationYear}
                   onChange={handleChange}
-                  placeholder="e.g. 2026"
                   className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
                 />
               </div>
             </div>
 
-            {/* About You (Bio) */}
+           
             <div>
               <div className="mb-1 flex items-center justify-between text-xs">
                 <label className="font-semibold text-gray-700">
@@ -294,7 +298,7 @@ export default function Registration() {
               />
             </div>
 
-            {/* Submit Button */}
+             
             <button
               type="submit"
               disabled={loading}
@@ -304,7 +308,7 @@ export default function Registration() {
             </button>
           </form>
 
-          {/* Messages */}
+        
           {success && (
             <p className="mt-3 text-center text-sm font-medium text-green-600">
               {success}
@@ -317,7 +321,7 @@ export default function Registration() {
             </p>
           )}
 
-          {/* Sign In Link */}
+          
           <p className="mt-4 text-center text-xs text-gray-600">
             Already have an account?{' '}
             <Link
