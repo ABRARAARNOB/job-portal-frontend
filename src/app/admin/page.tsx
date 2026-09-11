@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/axios';
 
@@ -160,91 +160,104 @@ export default function AdminDashboard() {
   const maxMetric = Math.max(metrics.totalUsers, metrics.students, metrics.recruiters, metrics.totalJobs, 1);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f3f5fa] text-gray-800">
-      <aside className="flex w-64 h-full shrink-0 flex-col justify-between border-r border-gray-100 bg-white p-5 shadow-sm">
+    <div className="flex h-screen overflow-hidden bg-[#f4f7fb] text-slate-800 antialiased font-sans">
+      <aside className="flex w-64 h-full shrink-0 flex-col justify-between border-r border-slate-200/80 bg-[#f8faff] p-5">
         <div>
-          <div className="flex items-center gap-3 px-2 py-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2f27ce] text-base font-bold text-white shadow-sm">
-              A
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-gray-900">Admin Portal</h2>
-              <p className="text-xs text-gray-400">UniCareer HQ</p>
-            </div>
+          <div className="px-3 pt-2 pb-6">
+            <h2 className="text-base font-bold tracking-tight text-[#3b28c8] leading-none">Admin Portal</h2>
+            <p className="mt-1 text-xs text-slate-500 font-normal">UniCareer HQ</p>
           </div>
 
-          <nav className="mt-8 space-y-1.5">
+          <nav className="space-y-1.5">
             <button
               onClick={() => setActiveTab('dashboard')}
-              className={`w-full text-left rounded-xl px-4 py-3 text-sm font-semibold transition ${
+              className={`flex w-full items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 activeTab === 'dashboard'
-                  ? 'bg-[#3b28c8] text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-[#3b28c8] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
               }`}
             >
-              Dashboard
+              <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zm-9 9h7v7H4v-7zm9 0h7v7h-7v-7z" />
+              </svg>
+              <span>Dashboard</span>
             </button>
 
             <button
               onClick={() => setActiveTab('users')}
-              className={`w-full text-left rounded-xl px-4 py-3 text-sm font-medium transition ${
+              className={`flex w-full items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 activeTab === 'users'
-                  ? 'bg-[#3b28c8] text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-[#3b28c8] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
               }`}
             >
-              Users
+              <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+              </svg>
+              <span>Users</span>
             </button>
 
             <button
               onClick={() => setActiveTab('jobs')}
-              className={`w-full text-left rounded-xl px-4 py-3 text-sm font-medium transition ${
+              className={`flex w-full items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 activeTab === 'jobs'
-                  ? 'bg-[#3b28c8] text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-[#3b28c8] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
               }`}
             >
-              Jobs
+              <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v1.081m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+              </svg>
+              <span>Jobs</span>
             </button>
 
             <button
               onClick={() => setActiveTab('applications')}
-              className={`w-full text-left rounded-xl px-4 py-3 text-sm font-medium transition ${
+              className={`flex w-full items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 activeTab === 'applications'
-                  ? 'bg-[#3b28c8] text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-[#3b28c8] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
               }`}
             >
-              Applications
+              <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+              </svg>
+              <span>Applications</span>
             </button>
           </nav>
         </div>
 
-        <div className="space-y-3 pt-6 border-t border-gray-100">
+        <div className="space-y-2 pt-4">
           <button
             onClick={() => router.push('/registration')}
-            className="w-full rounded-xl bg-[#2f27ce] py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#251eb0]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#3b28c8] py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#3120ab] transition"
           >
-            + New Admin
+            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <span>+ New Admin</span>
           </button>
 
           <button
             onClick={handleLogout}
-            className="w-full text-left px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 transition"
+            className="group flex w-full items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50/50 transition"
           >
-            Logout
+            <svg className="w-5 h-5 shrink-0 text-slate-400 group-hover:text-red-600 transition" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+            </svg>
+            <span>Logout</span>
           </button>
         </div>
       </aside>
 
-      <main className="flex-1 h-full overflow-y-auto p-8">
-        <div className="flex items-center justify-between pb-6">
+      <main className="flex-1 h-full overflow-y-auto p-8 lg:p-10">
+        <div className="flex items-center justify-between pb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 capitalize">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 capitalize">
               {activeTab} Overview
             </h1>
-            <p className="mt-1 text-sm text-gray-500">
-              Welcome back, Admin. Platform overview.
+            <p className="mt-1 text-sm text-slate-500 font-normal">
+              Welcome back, Admin. Here&apos;s what&apos;s happening today.
             </p>
           </div>
 
@@ -255,117 +268,117 @@ export default function AdminDashboard() {
               if (activeTab === 'jobs') fetchJobs();
               if (activeTab === 'applications') fetchApplications();
             }}
-            className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50"
+            className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50 transition"
           >
             Refresh
           </button>
         </div>
 
         {success && (
-          <div className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">
+          <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50/80 p-3.5 text-sm font-medium text-emerald-800 shadow-xs">
             {success}
           </div>
         )}
         {error && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+          <div className="mb-6 rounded-lg border border-red-200 bg-red-50/80 p-3.5 text-sm font-medium text-red-800 shadow-xs">
             {error}
           </div>
         )}
 
         {loading ? (
-          <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-2xl bg-white shadow-sm">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
-            <p className="text-sm font-extrabold text-gray-800">Loading data...</p>
+          <div className="flex h-72 flex-col items-center justify-center gap-3 rounded-lg border border-slate-100 bg-white shadow-xs">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#3b28c8] border-t-transparent" />
+            <p className="text-xs font-semibold text-slate-700">Loading data...</p>
           </div>
         ) : (
           <>
             {activeTab === 'dashboard' && (
               <>
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                  <div className="rounded-2xl border-l-4 border-indigo-600 bg-white p-5 shadow-sm">
-                    <span className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                  <div className="rounded-lg border border-slate-200/70 border-l-4 border-l-[#3b28c8] bg-white py-6 px-4 text-center shadow-xs">
+                    <p className="text-3xl font-extrabold tracking-tight text-[#3b28c8]">
+                      {metrics.totalUsers.toLocaleString()}
+                    </p>
+                    <p className="mt-2 text-xs font-bold tracking-wider text-slate-600 uppercase">
                       TOTAL USERS
-                    </span>
-                    <p className="mt-3 text-3xl font-extrabold text-gray-900">
-                      {metrics.totalUsers}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border-l-4 border-purple-500 bg-white p-5 shadow-sm">
-                    <span className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                  <div className="rounded-lg border border-slate-200/70 border-l-4 border-l-purple-600 bg-white py-6 px-4 text-center shadow-xs">
+                    <p className="text-3xl font-extrabold tracking-tight text-purple-600">
+                      {metrics.students.toLocaleString()}
+                    </p>
+                    <p className="mt-2 text-xs font-bold tracking-wider text-slate-600 uppercase">
                       STUDENTS
-                    </span>
-                    <p className="mt-3 text-3xl font-extrabold text-gray-900">
-                      {metrics.students}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border-l-4 border-slate-700 bg-white p-5 shadow-sm">
-                    <span className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                  <div className="rounded-lg border border-slate-200/70 border-l-4 border-l-blue-600 bg-white py-6 px-4 text-center shadow-xs">
+                    <p className="text-3xl font-extrabold tracking-tight text-blue-600">
+                      {metrics.recruiters.toLocaleString()}
+                    </p>
+                    <p className="mt-2 text-xs font-bold tracking-wider text-slate-600 uppercase">
                       RECRUITERS
-                    </span>
-                    <p className="mt-3 text-3xl font-extrabold text-gray-900">
-                      {metrics.recruiters}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border-l-4 border-indigo-400 bg-white p-5 shadow-sm">
-                    <span className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                  <div className="rounded-lg border border-slate-200/70 border-l-4 border-l-emerald-600 bg-white py-6 px-4 text-center shadow-xs">
+                    <p className="text-3xl font-extrabold tracking-tight text-emerald-600">
+                      {metrics.totalJobs.toLocaleString()}
+                    </p>
+                    <p className="mt-2 text-xs font-bold tracking-wider text-slate-600 uppercase">
                       TOTAL JOBS
-                    </span>
-                    <p className="mt-3 text-3xl font-extrabold text-gray-900">
-                      {metrics.totalJobs}
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-6 rounded-2xl bg-white p-6 shadow-sm">
-                  <h2 className="text-lg font-bold text-gray-900">Platform Overview Chart</h2>
-                  <p className="text-xs text-gray-500 mt-1">Comparison of total users, roles, and posted jobs</p>
+                <div className="mt-8 rounded-lg border border-slate-200/70 bg-white p-6 shadow-xs">
+                  <h2 className="text-base font-bold tracking-tight text-slate-900">Platform Overview Chart</h2>
+                  <p className="text-xs font-normal text-slate-400 mt-1">Comparison of total users, roles, and posted jobs</p>
 
-                  <div className="mt-8 flex h-64 items-end justify-around border-b border-gray-200 pb-2 px-6">
+                  <div className="mt-8 flex h-64 items-end justify-around border-b border-slate-100 pb-3 px-6">
                     <div className="flex flex-col items-center w-24">
-                      <span className="mb-2 text-sm font-bold text-indigo-700">{metrics.totalUsers}</span>
-                      <div className="w-16 rounded-t-lg bg-gray-100 h-44 flex items-end">
+                      <span className="mb-2 text-sm font-bold text-[#3b28c8]">{metrics.totalUsers}</span>
+                      <div className="w-16 rounded-t-lg bg-slate-50 h-44 flex items-end">
                         <div
                           style={{ height: `${Math.round((metrics.totalUsers / maxMetric) * 100)}%` }}
-                          className="w-full rounded-t-lg bg-indigo-600"
+                          className="w-full rounded-t-lg bg-[#3b28c8] transition-all duration-500"
                         />
                       </div>
-                      <span className="mt-3 text-xs font-semibold text-gray-600 text-center">Total Users</span>
+                      <span className="mt-3 text-xs font-medium text-slate-600 text-center">Total Users</span>
                     </div>
 
                     <div className="flex flex-col items-center w-24">
                       <span className="mb-2 text-sm font-bold text-purple-700">{metrics.students}</span>
-                      <div className="w-16 rounded-t-lg bg-gray-100 h-44 flex items-end">
+                      <div className="w-16 rounded-t-lg bg-slate-50 h-44 flex items-end">
                         <div
                           style={{ height: `${Math.round((metrics.students / maxMetric) * 100)}%` }}
-                          className="w-full rounded-t-lg bg-purple-500"
+                          className="w-full rounded-t-lg bg-purple-500 transition-all duration-500"
                         />
                       </div>
-                      <span className="mt-3 text-xs font-semibold text-gray-600 text-center">Students</span>
+                      <span className="mt-3 text-xs font-medium text-slate-600 text-center">Students</span>
                     </div>
 
                     <div className="flex flex-col items-center w-24">
-                      <span className="mb-2 text-sm font-bold text-slate-800">{metrics.recruiters}</span>
-                      <div className="w-16 rounded-t-lg bg-gray-100 h-44 flex items-end">
+                      <span className="mb-2 text-sm font-bold text-blue-700">{metrics.recruiters}</span>
+                      <div className="w-16 rounded-t-lg bg-slate-50 h-44 flex items-end">
                         <div
                           style={{ height: `${Math.round((metrics.recruiters / maxMetric) * 100)}%` }}
-                          className="w-full rounded-t-lg bg-slate-700"
+                          className="w-full rounded-t-lg bg-blue-500 transition-all duration-500"
                         />
                       </div>
-                      <span className="mt-3 text-xs font-semibold text-gray-600 text-center">Recruiters</span>
+                      <span className="mt-3 text-xs font-medium text-slate-600 text-center">Recruiters</span>
                     </div>
 
                     <div className="flex flex-col items-center w-24">
-                      <span className="mb-2 text-sm font-bold text-blue-600">{metrics.totalJobs}</span>
-                      <div className="w-16 rounded-t-lg bg-gray-100 h-44 flex items-end">
+                      <span className="mb-2 text-sm font-bold text-emerald-600">{metrics.totalJobs}</span>
+                      <div className="w-16 rounded-t-lg bg-slate-50 h-44 flex items-end">
                         <div
                           style={{ height: `${Math.round((metrics.totalJobs / maxMetric) * 100)}%` }}
-                          className="w-full rounded-t-lg bg-blue-500"
+                          className="w-full rounded-t-lg bg-emerald-500 transition-all duration-500"
                         />
                       </div>
-                      <span className="mt-3 text-xs font-semibold text-gray-600 text-center">Total Jobs</span>
+                      <span className="mt-3 text-xs font-medium text-slate-600 text-center">Total Jobs</span>
                     </div>
                   </div>
                 </div>
@@ -374,31 +387,31 @@ export default function AdminDashboard() {
 
             {activeTab === 'users' && (
               <div>
-                <div className="flex items-center justify-between pb-4">
-                  <h2 className="text-lg font-bold text-gray-900">Platform Users ({users.length})</h2>
+                <div className="flex items-center justify-between pb-5">
+                  <h2 className="text-lg font-bold tracking-tight text-slate-900">Platform Users ({users.length})</h2>
                 </div>
 
                 {users.length === 0 ? (
-                  <div className="rounded-2xl bg-white p-8 text-center text-sm text-gray-500 shadow-sm">
+                  <div className="rounded-lg border border-slate-200/70 bg-white p-12 text-center text-sm font-medium text-slate-400 shadow-xs">
                     No users found.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {users.map((user) => (
                       <div
                         key={user.id}
-                        className="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                        className="flex flex-col justify-between rounded-lg border border-slate-200/70 bg-white p-4 shadow-xs transition hover:shadow-sm"
                       >
                         <div>
-                          <div className="flex items-center justify-between text-xs text-gray-400">
-                            <span className="font-semibold text-gray-600">User #{user.id}</span>
+                          <div className="flex items-center justify-between text-xs text-slate-500">
+                            <span className="font-semibold text-slate-600">User #{user.id}</span>
                             <span
-                              className={`rounded-full px-2.5 py-0.5 text-xs font-bold uppercase ${
+                              className={`rounded px-2.5 py-0.5 text-xs font-semibold uppercase ${
                                 user.role === 'admin'
-                                  ? 'bg-purple-100 text-purple-700'
+                                  ? 'bg-purple-50 text-purple-700'
                                   : user.role === 'recruiter'
-                                  ? 'bg-indigo-100 text-indigo-700'
-                                  : 'bg-green-100 text-green-700'
+                                  ? 'bg-indigo-50 text-indigo-700'
+                                  : 'bg-emerald-50 text-emerald-700'
                               }`}
                             >
                               {user.role}
@@ -406,20 +419,20 @@ export default function AdminDashboard() {
                           </div>
 
                           <div className="mt-3 flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-sm font-bold text-gray-700">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-sm font-bold text-slate-700">
                               {user.fullName?.charAt(0)?.toUpperCase() || 'U'}
                             </div>
-                            <div>
-                              <h3 className="text-base font-bold text-gray-900 line-clamp-1">{user.fullName}</h3>
-                              <p className="text-xs text-gray-500">{user.email}</p>
+                            <div className="min-w-0">
+                              <h3 className="text-sm font-bold tracking-tight text-slate-900 truncate">{user.fullName}</h3>
+                              <p className="text-xs font-normal text-slate-500 truncate">{user.email}</p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="mt-5 flex justify-end border-t border-gray-100 pt-3">
+                        <div className="mt-3.5 flex justify-end border-t border-slate-100 pt-3">
                           <button
                             onClick={() => handleDeleteUser(user.id)}
-                            className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 transition"
+                            className="rounded-md bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 transition"
                           >
                             Delete User
                           </button>
@@ -433,47 +446,47 @@ export default function AdminDashboard() {
 
             {activeTab === 'jobs' && (
               <div>
-                <div className="flex items-center justify-between pb-4">
-                  <h2 className="text-lg font-bold text-gray-900">Platform Jobs ({jobs.length})</h2>
+                <div className="flex items-center justify-between pb-5">
+                  <h2 className="text-lg font-bold tracking-tight text-slate-900">Platform Jobs ({jobs.length})</h2>
                 </div>
 
                 {jobs.length === 0 ? (
-                  <div className="rounded-2xl bg-white p-8 text-center text-sm text-gray-500 shadow-sm">
+                  <div className="rounded-lg border border-slate-200/70 bg-white p-12 text-center text-sm font-medium text-slate-400 shadow-xs">
                     No jobs found.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {jobs.map((job) => (
                       <div
                         key={job.id}
-                        className="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                        className="flex flex-col justify-between rounded-lg border border-slate-200/70 bg-white p-4 shadow-xs transition hover:shadow-sm"
                       >
                         <div>
-                          <div className="flex items-center justify-between text-xs text-gray-400">
-                            <span className="font-semibold text-gray-600">Job #{job.id}</span>
+                          <div className="flex items-center justify-between text-xs text-slate-500">
+                            <span className="font-semibold text-slate-600">Job #{job.id}</span>
                             {job.location && (
-                              <span className="rounded bg-gray-100 px-2 py-0.5 font-medium text-gray-600">
+                              <span className="rounded bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
                                 {job.location}
                               </span>
                             )}
                           </div>
 
-                          <h3 className="mt-2 text-base font-bold text-gray-900 line-clamp-1">{job.title}</h3>
-                          <p className="text-xs font-medium text-gray-500">{job.company || 'N/A'}</p>
+                          <h3 className="mt-2 text-sm font-bold tracking-tight text-slate-900 line-clamp-1">{job.title}</h3>
+                          <p className="text-xs font-normal text-slate-500">{job.company || 'N/A'}</p>
 
                           {job.description && (
-                            <p className="mt-2 text-xs text-gray-600 line-clamp-2">{job.description}</p>
+                            <p className="mt-2 text-xs font-normal text-slate-600 line-clamp-2 leading-relaxed">{job.description}</p>
                           )}
 
-                          <p className="mt-3 text-sm font-extrabold text-indigo-600">
+                          <p className="mt-3 text-sm font-bold text-[#3b28c8]">
                             {job.salary ? `$${job.salary.toLocaleString()}` : 'Negotiable'}
                           </p>
                         </div>
 
-                        <div className="mt-4 flex justify-end border-t border-gray-100 pt-3">
+                        <div className="mt-3.5 flex justify-end border-t border-slate-100 pt-3">
                           <button
                             onClick={() => handleDeleteJob(job.id)}
-                            className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 transition"
+                            className="rounded-md bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 transition"
                           >
                             Delete Job
                           </button>
@@ -487,43 +500,43 @@ export default function AdminDashboard() {
 
             {activeTab === 'applications' && (
               <div>
-                <div className="flex items-center justify-between pb-4">
-                  <h2 className="text-lg font-bold text-gray-900">Applications ({applications.length})</h2>
+                <div className="flex items-center justify-between pb-5">
+                  <h2 className="text-lg font-bold tracking-tight text-slate-900">Applications ({applications.length})</h2>
                 </div>
 
                 {applications.length === 0 ? (
-                  <div className="rounded-2xl bg-white p-8 text-center text-sm text-gray-500 shadow-sm">
+                  <div className="rounded-lg border border-slate-200/70 bg-white p-12 text-center text-sm font-medium text-slate-400 shadow-xs">
                     No applications found.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {applications.map((app) => (
                       <div
                         key={app.id}
-                        className="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                        className="flex flex-col justify-between rounded-lg border border-slate-200/70 bg-white p-4 shadow-xs transition hover:shadow-sm"
                       >
                         <div>
-                          <div className="flex items-center justify-between text-xs text-gray-400">
-                            <span className="font-semibold text-gray-600">Application #{app.id}</span>
+                          <div className="flex items-center justify-between text-xs text-slate-500">
+                            <span className="font-semibold text-slate-600">Application #{app.id}</span>
                             <span
-                              className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                              className={`rounded px-2.5 py-0.5 text-xs font-semibold uppercase ${
                                 app.status?.toLowerCase() === 'accepted'
-                                  ? 'bg-green-100 text-green-800'
+                                  ? 'bg-emerald-50 text-emerald-700'
                                   : app.status?.toLowerCase() === 'rejected'
-                                  ? 'bg-red-100 text-red-800'
-                                  : 'bg-yellow-100 text-yellow-800'
+                                  ? 'bg-red-50 text-red-700'
+                                  : 'bg-amber-50 text-amber-700'
                               }`}
                             >
                               {app.status}
                             </span>
                           </div>
 
-                          <div className="mt-3 space-y-1">
-                            <p className="text-xs text-gray-500">
-                              Job ID: <span className="font-bold text-gray-800">#{app.jobId}</span>
+                          <div className="mt-3.5 space-y-1.5 text-xs text-slate-500">
+                            <p>
+                              Job ID: <span className="font-semibold text-slate-800">#{app.jobId}</span>
                             </p>
-                            <p className="text-xs text-gray-500">
-                              Applicant User ID: <span className="font-bold text-gray-800">#{app.userId}</span>
+                            <p>
+                              Applicant User ID: <span className="font-semibold text-slate-800">#{app.userId}</span>
                             </p>
                           </div>
                         </div>
