@@ -82,6 +82,13 @@ useEffect(() => {
 }, [loginResponse, user?.role, router]);
 
 
+useEffect(() => {
+  if (loginResponse?.status && user?.role === 'student') {
+    router.push('/student');
+  }
+}, [loginResponse, user?.role, router]);
+
+
     return (
         <div className="flex min-h-screen flex-col bg-[#f7f6fd] px-4 py-10">
             <div className="text-center">
