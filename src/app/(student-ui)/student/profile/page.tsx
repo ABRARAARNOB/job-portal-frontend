@@ -65,7 +65,7 @@ export default function ProfilePage() {
     setSuccess('');
 
     const response = await api.patch(
-      `/user/update/${encodeURIComponent(user.email)}`,
+      `/user/${encodeURIComponent(user.email)}`,
       data,
     );
 
