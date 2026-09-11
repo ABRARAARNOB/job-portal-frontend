@@ -34,7 +34,7 @@ export default function Jobs() {
         setLoading(true);
         setError('');
 
-        const response = await api.get('/job/find-job');
+        const response = await api.get('/job');
 
         setJobs(response.data);
 
