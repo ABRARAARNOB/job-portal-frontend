@@ -54,7 +54,7 @@ export default function ProfilePage() {
   // Update profile
   const handleSave = async (data: {
   fullName: string;
-  graduationYear: number;
+  graduationYear: string;
   bio: string;
 }) => {
   if (!user) return;

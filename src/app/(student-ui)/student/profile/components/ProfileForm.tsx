@@ -11,7 +11,7 @@ interface ProfileFormProps {
 
   onSave: (data: {
     fullName: string;
-    graduationYear: number;
+    graduationYear: string;
     bio: string;
   }) => Promise<void>;
 
@@ -39,7 +39,7 @@ export default function ProfileForm({
 
     await onSave({
       fullName: name,
-      graduationYear: Number(year),
+      graduationYear: year,
       bio: bioText,
     });
   };
