@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { z } from 'zod';
@@ -32,7 +32,10 @@ const registrationSchema = z
     graduationYear: z
       .string()
       .min(1, 'Graduation year is required')
-      .refine((val) => !isNaN(Number(val)) && Number(val) >= 1950 && Number(val) <= 2100, {
+      .refine((val) => {
+        const year = val.includes('-') ? parseInt(val.split('-')[0], 10) : Number(val);
+        return !isNaN(year) && year >= 1950 && year <= 2100;
+      }, {
         message: 'Graduation year must be a valid year (e.g. 2026)',
       }),
     bio: z
@@ -95,12 +98,16 @@ export default function Registration() {
     try {
       
       const validatedData = result.data;
+      const parsedYear = validatedData.graduationYear.includes('-')
+        ? parseInt(validatedData.graduationYear.split('-')[0], 10)
+        : Number(validatedData.graduationYear);
+
       const payload = {
         fullName: validatedData.fullName,
         email: validatedData.email,
         password: validatedData.password,
         role: validatedData.role,
-        graduationYear: Number(validatedData.graduationYear),
+        graduationYear: parsedYear,
         ...(validatedData.bio?.trim() ? { bio: validatedData.bio.trim() } : {}),
       };
 
@@ -261,11 +268,10 @@ export default function Registration() {
                   Graduation Year
                 </label>
                 <input
-                  type="number"
+                  type="date"
                   name="graduationYear"
                   value={formData.graduationYear}
                   onChange={handleChange}
-                  placeholder="e.g. 2026"
                   className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
                 />
               </div>
