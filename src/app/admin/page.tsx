@@ -23,6 +23,8 @@ interface Job {
   title: string;
   company: string;
   salary: number;
+  location?: string;
+  description?: string;
 }
 
 interface Application {
@@ -77,7 +79,6 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       const response = await api.get('/admin/users');
-      console.log('Users response:', response.data);
       setUsers(response.data);
     } catch (error: any) {
       setError(error.response?.data?.message || 'Failed to get users');
@@ -103,7 +104,6 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       const response = await api.get('/admin/jobs');
-      console.log('Jobs response:', response.data);
       setJobs(response.data);
     } catch (error: any) {
       setError(error.response?.data?.message || 'Failed to get jobs');
@@ -129,7 +129,6 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       const response = await api.get('/admin/applications');
-      console.log('Applications response:', response.data);
       setApplications(response.data);
     } catch (error: any) {
       setError(error.response?.data?.message || 'Failed to get applications');
@@ -161,8 +160,8 @@ export default function AdminDashboard() {
   const maxMetric = Math.max(metrics.totalUsers, metrics.students, metrics.recruiters, metrics.totalJobs, 1);
 
   return (
-    <div className="flex min-h-screen bg-[#f3f5fa] text-gray-800">
-      <aside className="flex w-64 flex-col justify-between border-r border-gray-100 bg-white p-5 shadow-sm">
+    <div className="flex h-screen overflow-hidden bg-[#f3f5fa] text-gray-800">
+      <aside className="flex w-64 h-full shrink-0 flex-col justify-between border-r border-gray-100 bg-white p-5 shadow-sm">
         <div>
           <div className="flex items-center gap-3 px-2 py-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2f27ce] text-base font-bold text-white shadow-sm">
@@ -238,7 +237,7 @@ export default function AdminDashboard() {
         </div>
       </aside>
 
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 h-full overflow-y-auto p-8">
         <div className="flex items-center justify-between pb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 capitalize">
@@ -274,11 +273,11 @@ export default function AdminDashboard() {
         )}
 
         {loading ? (
-  <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-2xl bg-white shadow-sm">
-    <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
-    <p className="text-sm font-extrabold text-gray-800">Loading data...</p>
-  </div>
-) : (
+          <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-2xl bg-white shadow-sm">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
+            <p className="text-sm font-extrabold text-gray-800">Loading data...</p>
+          </div>
+        ) : (
           <>
             {activeTab === 'dashboard' && (
               <>
@@ -374,122 +373,162 @@ export default function AdminDashboard() {
             )}
 
             {activeTab === 'users' && (
-              <div className="rounded-2xl bg-white p-6 shadow-sm">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Manage Users</h2>
+              <div>
+                <div className="flex items-center justify-between pb-4">
+                  <h2 className="text-lg font-bold text-gray-900">Platform Users ({users.length})</h2>
+                </div>
+
                 {users.length === 0 ? (
-                  <p className="text-sm text-gray-500">No users found.</p>
+                  <div className="rounded-2xl bg-white p-8 text-center text-sm text-gray-500 shadow-sm">
+                    No users found.
+                  </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-gray-700">
-                      <thead className="bg-gray-50 text-xs uppercase text-gray-400">
-                        <tr>
-                          <th className="p-3">ID</th>
-                          <th className="p-3">Name</th>
-                          <th className="p-3">Email</th>
-                          <th className="p-3">Role</th>
-                          <th className="p-3">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {users.map((user) => (
-                          <tr key={user.id} className="border-b border-gray-100 hover:bg-gray-50">
-                            <td className="p-3 font-mono">{user.id}</td>
-                            <td className="p-3 font-medium text-gray-900">{user.fullName}</td>
-                            <td className="p-3">{user.email}</td>
-                            <td className="p-3">
-                              <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700 uppercase">
-                                {user.role}
-                              </span>
-                            </td>
-                            <td className="p-3">
-                              <button
-                                onClick={() => handleDeleteUser(user.id)}
-                                className="rounded bg-red-500 px-3 py-1 text-xs font-semibold text-white hover:bg-red-600"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {users.map((user) => (
+                      <div
+                        key={user.id}
+                        className="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between text-xs text-gray-400">
+                            <span className="font-semibold text-gray-600">User #{user.id}</span>
+                            <span
+                              className={`rounded-full px-2.5 py-0.5 text-xs font-bold uppercase ${
+                                user.role === 'admin'
+                                  ? 'bg-purple-100 text-purple-700'
+                                  : user.role === 'recruiter'
+                                  ? 'bg-indigo-100 text-indigo-700'
+                                  : 'bg-green-100 text-green-700'
+                              }`}
+                            >
+                              {user.role}
+                            </span>
+                          </div>
+
+                          <div className="mt-3 flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-sm font-bold text-gray-700">
+                              {user.fullName?.charAt(0)?.toUpperCase() || 'U'}
+                            </div>
+                            <div>
+                              <h3 className="text-base font-bold text-gray-900 line-clamp-1">{user.fullName}</h3>
+                              <p className="text-xs text-gray-500">{user.email}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mt-5 flex justify-end border-t border-gray-100 pt-3">
+                          <button
+                            onClick={() => handleDeleteUser(user.id)}
+                            className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 transition"
+                          >
+                            Delete User
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
             )}
 
             {activeTab === 'jobs' && (
-              <div className="rounded-2xl bg-white p-6 shadow-sm">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Manage Jobs</h2>
+              <div>
+                <div className="flex items-center justify-between pb-4">
+                  <h2 className="text-lg font-bold text-gray-900">Platform Jobs ({jobs.length})</h2>
+                </div>
+
                 {jobs.length === 0 ? (
-                  <p className="text-sm text-gray-500">No jobs found.</p>
+                  <div className="rounded-2xl bg-white p-8 text-center text-sm text-gray-500 shadow-sm">
+                    No jobs found.
+                  </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-gray-700">
-                      <thead className="bg-gray-50 text-xs uppercase text-gray-400">
-                        <tr>
-                          <th className="p-3">ID</th>
-                          <th className="p-3">Title</th>
-                          <th className="p-3">Company</th>
-                          <th className="p-3">Salary</th>
-                          <th className="p-3">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {jobs.map((job) => (
-                          <tr key={job.id} className="border-b border-gray-100 hover:bg-gray-50">
-                            <td className="p-3 font-mono">{job.id}</td>
-                            <td className="p-3 font-medium text-gray-900">{job.title}</td>
-                            <td className="p-3">{job.company}</td>
-                            <td className="p-3">${job.salary}</td>
-                            <td className="p-3">
-                              <button
-                                onClick={() => handleDeleteJob(job.id)}
-                                className="rounded bg-red-500 px-3 py-1 text-xs font-semibold text-white hover:bg-red-600"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {jobs.map((job) => (
+                      <div
+                        key={job.id}
+                        className="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between text-xs text-gray-400">
+                            <span className="font-semibold text-gray-600">Job #{job.id}</span>
+                            {job.location && (
+                              <span className="rounded bg-gray-100 px-2 py-0.5 font-medium text-gray-600">
+                                {job.location}
+                              </span>
+                            )}
+                          </div>
+
+                          <h3 className="mt-2 text-base font-bold text-gray-900 line-clamp-1">{job.title}</h3>
+                          <p className="text-xs font-medium text-gray-500">{job.company || 'N/A'}</p>
+
+                          {job.description && (
+                            <p className="mt-2 text-xs text-gray-600 line-clamp-2">{job.description}</p>
+                          )}
+
+                          <p className="mt-3 text-sm font-extrabold text-indigo-600">
+                            {job.salary ? `$${job.salary.toLocaleString()}` : 'Negotiable'}
+                          </p>
+                        </div>
+
+                        <div className="mt-4 flex justify-end border-t border-gray-100 pt-3">
+                          <button
+                            onClick={() => handleDeleteJob(job.id)}
+                            className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 transition"
+                          >
+                            Delete Job
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
             )}
 
             {activeTab === 'applications' && (
-              <div className="rounded-2xl bg-white p-6 shadow-sm">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Job Applications</h2>
+              <div>
+                <div className="flex items-center justify-between pb-4">
+                  <h2 className="text-lg font-bold text-gray-900">Applications ({applications.length})</h2>
+                </div>
+
                 {applications.length === 0 ? (
-                  <p className="text-sm text-gray-500">No applications found.</p>
+                  <div className="rounded-2xl bg-white p-8 text-center text-sm text-gray-500 shadow-sm">
+                    No applications found.
+                  </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-gray-700">
-                      <thead className="bg-gray-50 text-xs uppercase text-gray-400">
-                        <tr>
-                          <th className="p-3">ID</th>
-                          <th className="p-3">Job ID</th>
-                          <th className="p-3">User ID</th>
-                          <th className="p-3">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {applications.map((app) => (
-                          <tr key={app.id} className="border-b border-gray-100 hover:bg-gray-50">
-                            <td className="p-3 font-mono">{app.id}</td>
-                            <td className="p-3">{app.jobId}</td>
-                            <td className="p-3">{app.userId}</td>
-                            <td className="p-3">
-                              <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 uppercase">
-                                {app.status}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {applications.map((app) => (
+                      <div
+                        key={app.id}
+                        className="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between text-xs text-gray-400">
+                            <span className="font-semibold text-gray-600">Application #{app.id}</span>
+                            <span
+                              className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                                app.status?.toLowerCase() === 'accepted'
+                                  ? 'bg-green-100 text-green-800'
+                                  : app.status?.toLowerCase() === 'rejected'
+                                  ? 'bg-red-100 text-red-800'
+                                  : 'bg-yellow-100 text-yellow-800'
+                              }`}
+                            >
+                              {app.status}
+                            </span>
+                          </div>
+
+                          <div className="mt-3 space-y-1">
+                            <p className="text-xs text-gray-500">
+                              Job ID: <span className="font-bold text-gray-800">#{app.jobId}</span>
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Applicant User ID: <span className="font-bold text-gray-800">#{app.userId}</span>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
