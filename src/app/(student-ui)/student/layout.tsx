@@ -1,10 +1,12 @@
 'use client'
 import { BriefcaseBusiness, FileText, GraduationCap, LayoutDashboard, LogOut, Send, UserRound } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 
 export      default function Layout({children}: {children: React.ReactNode}) {
+
+    const router = useRouter();
 
     const isActive = (href: string) => 
     {
@@ -15,6 +17,11 @@ export      default function Layout({children}: {children: React.ReactNode}) {
         }
         return pathname?.startsWith(href);
     }
+
+    const handleLogout = () => {
+        localStorage.removeItem('access_token');
+        router.replace('/login');
+    };
   return (
     <div className=" bg-[#f7f7ff] text-[#20243a] min-h-screen">
 
@@ -100,7 +107,11 @@ export      default function Layout({children}: {children: React.ReactNode}) {
                     Submit Application
                 </Link>
                 <div className='mt-6 border-t border-[#d8d9eb] pt-4'>
-                    <button className='flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#65697d] transition hover:bg-white hover:text-[#4134d8]'>
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        className='flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#65697d] transition hover:bg-white hover:text-[#4134d8]'
+                    >
                         <LogOut size={18} />
                         Logout
                     </button>

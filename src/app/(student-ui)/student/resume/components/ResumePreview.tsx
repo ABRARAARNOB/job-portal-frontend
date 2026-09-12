@@ -24,8 +24,8 @@ export default function ResumePreview({
   onDelete,
   deleting,
 }: ResumePreviewProps) {
-  const fileUrl = `http://localhost:4000/${resume.filePath
-    .replace('./', '')
+  const fileUrl = `/api/backend/${resume.filePath
+    .replace(/^\.\//, '')
     .replace(/\\/g, '/')}`;
 
   return (

@@ -65,11 +65,11 @@ export default function ProfilePage() {
     setSuccess('');
 
     const response = await api.patch(
-      `/user/update/${encodeURIComponent(user.email)}`,
+      `/user/${encodeURIComponent(user.email)}`,
       data,
     );
 
-    setUser(response.data.data);
+    setUser(response.data.data ?? response.data);
 
     setSuccess('Profile updated successfully.');
   } catch (error: any) {

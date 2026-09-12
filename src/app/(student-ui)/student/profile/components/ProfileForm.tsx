@@ -26,7 +26,7 @@ export default function ProfileForm({
   onSave,
   saving,
 }: ProfileFormProps) {
-  const [name, setName] = useState(fullName);
+  const [name, setName] = useState(fullName ?? '');
   const [year, setYear] = useState(
     graduationYear?.toString() || '',
   );
@@ -90,7 +90,7 @@ export default function ProfileForm({
             <input
               id="email"
               type="email"
-              value={email}
+              value={email ?? ''}
               disabled
               className="w-full cursor-not-allowed rounded-lg border border-[#dedff0] bg-[#f6f6f9] px-4 py-3 text-sm text-[#777b91] outline-none"
             />
