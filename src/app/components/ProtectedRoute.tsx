@@ -25,7 +25,9 @@ export default function ProtectedRoute({ children, role }: ProtectedRouteProps) 
     const verifyAccess = async () => {
       try {
         const response = await api.get<AuthUser>('/auth/me');
-        const userRole = response.data?.role?.toLowerCase();
+        const userRole = response.data && response.data.role
+          ? response.data.role.toLowerCase()
+          : undefined;
 
         if (userRole !== role) {
           localStorage.removeItem('access_token');

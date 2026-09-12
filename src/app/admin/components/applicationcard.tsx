@@ -1,21 +1,21 @@
 interface Application {
   id: number;
-  jobId?: number;
-  userId?: number;
-  studentId?: number;
-  status?: string;
-  appliedAt?: string;
-  job?: {
-    title?: string;
-    company?: string;
+  jobId: number;
+  userId: number;
+  studentId: number;
+  status: string;
+  appliedAt: string;
+  job: {
+    title: string;
+    company: string;
   };
-  student?: {
-    fullName?: string;
-    email?: string;
+  student: {
+    fullName: string;
+    email: string;
   };
-  user?: {
-    fullName?: string;
-    email?: string;
+  user: {
+    fullName: string;
+    email: string;
   };
 }
 
@@ -25,7 +25,16 @@ interface ApplicationCardProps {
 
 export default function ApplicationCard({ app }: ApplicationCardProps) {
   const applicant = app.student || app.user;
-  const status = app.status?.toLowerCase() || 'pending';
+  const status = app.status ? app.status.toLowerCase() : 'pending';
+  const applicantName = applicant && applicant.fullName
+    ? applicant.fullName
+    : `Applicant #${app.studentId || app.userId || 'Unknown'}`;
+  const applicantEmail = applicant && applicant.email
+    ? applicant.email
+    : 'Email not provided';
+  const jobTitle = app.job && app.job.title
+    ? app.job.title
+    : `Job #${app.jobId || 'Unknown'}`;
 
   return (
     <div className="flex flex-col justify-between rounded-lg border border-slate-200/70 bg-white p-5 shadow-xs transition hover:-translate-y-0.5 hover:shadow-md">
@@ -49,12 +58,12 @@ export default function ApplicationCard({ app }: ApplicationCardProps) {
 
         <div className="mt-4 border-t border-slate-100 pt-4">
           <h3 className="text-sm font-bold text-slate-900">
-            {applicant?.fullName || `Applicant #${app.studentId || app.userId || 'Unknown'}`}
+            {applicantName}
           </h3>
-          <p className="mt-1 text-xs text-slate-500">{applicant?.email || 'Email not provided'}</p>
+          <p className="mt-1 text-xs text-slate-500">{applicantEmail}</p>
           <div className="mt-3 rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-600">
-            <p className="font-semibold text-slate-800">{app.job?.title || `Job #${app.jobId || 'Unknown'}`}</p>
-            {app.job?.company && <p className="mt-0.5">{app.job.company}</p>}
+            <p className="font-semibold text-slate-800">{jobTitle}</p>
+            {app.job && app.job.company && <p className="mt-0.5">{app.job.company}</p>}
           </div>
           {app.appliedAt && (
             <p className="mt-3 text-xs text-slate-400">

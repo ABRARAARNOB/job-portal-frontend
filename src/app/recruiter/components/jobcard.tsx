@@ -1,11 +1,11 @@
 interface Job {
   id: number;
   title: string;
-  company?: string;
-  salary?: number;
-  location?: string;
-  description?: string;
-  status?: string;
+  company: string;
+  salary: number;
+  location: string;
+  description: string;
+  status: string;
 }
 
 interface JobCardProps {
@@ -20,7 +20,7 @@ export default function JobCard({ job, onView, onApplicants, onEdit, onDelete }:
   const isManageable = Boolean(onEdit && onDelete);
 
   return (
-    <div className="group relative flex min-h-[285px] flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg">
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg">
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#3b28c8] via-indigo-500 to-emerald-400" />
       <div>
         <div className="flex items-center justify-between gap-3 text-xs text-slate-500">
@@ -34,16 +34,20 @@ export default function JobCard({ job, onView, onApplicants, onEdit, onDelete }:
           )}
         </div>
 
-        <h3 className="mt-4 min-h-10 text-base font-bold leading-5 tracking-tight text-slate-900 line-clamp-2">
+        <h3 className="mt-4 text-base font-bold leading-5 tracking-tight text-slate-900 line-clamp-2">
           {job.title}
         </h3>
-        <p className="mt-1 text-xs font-medium text-slate-500">{job.company || 'Company not specified'}</p>
+        <div className="mt-3">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Company</p>
+          <p className="mt-1 text-sm font-semibold text-slate-700">{job.company || 'Company not specified'}</p>
+        </div>
 
-        {job.description && (
-          <p className="mt-4 min-h-9 text-xs leading-relaxed text-slate-600 line-clamp-2">
-            {job.description}
+        <div className="mt-4">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Description</p>
+          <p className="mt-1 text-xs leading-relaxed text-slate-600 line-clamp-3">
+            {job.description || 'No description provided.'}
           </p>
-        )}
+        </div>
 
         <div className="mt-4 flex items-end justify-between border-t border-slate-100 pt-3">
           <div>

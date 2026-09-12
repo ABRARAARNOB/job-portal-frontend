@@ -3,8 +3,8 @@ interface Job {
   title: string;
   company: string;
   salary: number;
-  location?: string;
-  description?: string;
+  location: string;
+  description: string;
 }
 
 interface JobCardProps {

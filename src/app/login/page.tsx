@@ -25,6 +25,7 @@ export default function Login() {
     const [error, setError] = useState<string>('');
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const userRole = user ? user.role : undefined;
 
     async function handleLogin(e :any) {
         e.preventDefault();
@@ -45,8 +46,11 @@ export default function Login() {
             await handleRole();
             }
         } catch (error: any) {
+            const responseMessage = error && error.response && error.response.data
+                ? error.response.data.message
+                : undefined;
             setError(
-            error.response?.data?.message || 'Login failed',
+            responseMessage || 'Login failed',
             );
         } finally {
             setLoading(false);
@@ -62,31 +66,33 @@ export default function Login() {
 
     setUser(res.data);
   } catch (error: any) {
+        const responseData = error && error.response ? error.response.data : undefined;
+        const errorMessage = error && error.message ? error.message : 'Unknown error';
     console.error(
       'Failed to get user:',
-      error.response?.data || error.message,
+            responseData || errorMessage,
     );
   }
 };
 
 useEffect(() => {
-  if (loginResponse?.status && user?.role === 'recruiter') {
+    if (loginResponse && loginResponse.status && userRole === 'recruiter') {
     router.push('/recruiter');
   }
-}, [loginResponse, user?.role, router]);
+}, [loginResponse, userRole, router]);
 
 useEffect(() => {
-  if (loginResponse?.status && user?.role === 'admin') {
+    if (loginResponse && loginResponse.status && userRole === 'admin') {
     router.push('/admin');
   }
-}, [loginResponse, user?.role, router]);
+}, [loginResponse, userRole, router]);
 
 
 useEffect(() => {
-  if (loginResponse?.status && user?.role === 'student') {
+    if (loginResponse && loginResponse.status && userRole === 'student') {
     router.push('/student');
   }
-}, [loginResponse, user?.role, router]);
+}, [loginResponse, userRole, router]);
 
 
     return (
@@ -167,7 +173,7 @@ useEffect(() => {
                         </button>
                     </form>
 
-                    {loginResponse?.message && (
+                    {loginResponse && loginResponse.message && (
                         <p className="mt-4 text-center text-sm text-green-600">
                             {loginResponse.message}
                         </p>

@@ -108,7 +108,9 @@ export default function Registration() {
         password: validatedData.password,
         role: validatedData.role,
         graduationYear: parsedYear,
-        ...(validatedData.bio?.trim() ? { bio: validatedData.bio.trim() } : {}),
+        ...(validatedData.bio && validatedData.bio.trim()
+          ? { bio: validatedData.bio.trim() }
+          : {}),
       };
 
       const response = await api.post(
@@ -116,13 +118,19 @@ export default function Registration() {
         payload
       );
 
-      setSuccess(response.data?.message || 'Registration successful! Redirecting to login...');
+      setSuccess(
+        response.data && response.data.message
+          ? response.data.message
+          : 'Registration successful! Redirecting to login...',
+      );
 
       setTimeout(() => {
         router.push('/login');
       }, 1500);
     } catch (err: any) {
-      const msg = err.response?.data?.message;
+      const msg = err && err.response && err.response.data
+        ? err.response.data.message
+        : undefined;
       if (Array.isArray(msg)) {
         setError(msg.join(', '));
       } else {

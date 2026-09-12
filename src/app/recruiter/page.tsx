@@ -11,33 +11,48 @@ import ProtectedRoute from '@/app/components/ProtectedRoute';
 interface Job {
   id: number;
   title: string;
-  company?: string;
-  salary?: number;
-  location?: string;
-  description?: string;
-  status?: string;
+  company: string;
+  salary: number;
+  location: string;
+  description: string;
+  status: string;
 }
 
 interface Application {
   id: number;
-  status?: string;
-  appliedAt?: string;
-  studentId?: number;
-  userId?: number;
-  student?: Record<string, unknown>;
-  user?: Record<string, unknown>;
-  applicant?: Record<string, unknown>;
-  resume?: {
-    fileName?: string;
-    filePath?: string;
+  status: string;
+  appliedAt: string;
+  studentId: number;
+  userId: number;
+  student: Record<string, unknown>;
+  user: Record<string, unknown>;
+  applicant: Record<string, unknown>;
+  resume: {
+    fileName: string;
+    filePath: string;
   } | null;
 }
 
+const getRecruiterErrorMessage = (error: any, fallback: string) => {
+  const message = error && error.response && error.response.data
+    ? error.response.data.message
+    : undefined;
+
+  if (Array.isArray(message)) {
+    return message.join(', ');
+  }
+
+  if (message) {
+    return message;
+  }
+  return fallback;
+};
+
 type ApplicantData = Record<string, unknown> & {
-  id?: number;
-  userId?: number;
-  user?: {
-    id?: number;
+  id: number;
+  userId: number;
+  user: {
+    id: number;
   };
 };
 
@@ -56,6 +71,7 @@ export default function RecruiterDashboard() {
 
   const [myJobs, setMyJobs] = useState<Job[]>([]);
   const [allJobs, setAllJobs] = useState<Job[]>([]);
+  const [dashboardApplications, setDashboardApplications] = useState<Application[]>([]);
 
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [showViewModal, setShowViewModal] = useState<boolean>(false);
@@ -65,6 +81,7 @@ export default function RecruiterDashboard() {
   const [applicantsLoading, setApplicantsLoading] = useState<boolean>(false);
   const [updatingApplicationId, setUpdatingApplicationId] = useState<number | null>(null);
   const [selectedStatuses, setSelectedStatuses] = useState<Record<number, string>>({});
+  
 
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [newJob, setNewJob] = useState({
@@ -99,8 +116,24 @@ export default function RecruiterDashboard() {
 
       setMyJobs(Array.isArray(myJobsRes.data) ? myJobsRes.data : []);
       setAllJobs(Array.isArray(allJobsRes.data) ? allJobsRes.data : []);
+
+      const recruiterApplications = await Promise.all(
+        (Array.isArray(myJobsRes.data) ? myJobsRes.data : []).map(async (job: Job) => {
+          try {
+            const response = await api.get(`/application/PostedJob/${job.id}`);
+            const applications = Array.isArray(response.data)
+              ? response.data
+              : response.data && response.data.applications;
+            return Array.isArray(applications) ? applications : [];
+          } catch {
+            return [];
+          }
+        }),
+      );
+
+      setDashboardApplications(recruiterApplications.flat());
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to load jobs');
+      setError(getRecruiterErrorMessage(err, 'Failed to load jobs'));
     } finally {
       setLoading(false);
     }
@@ -112,7 +145,7 @@ export default function RecruiterDashboard() {
       const res = await api.get('/job/my-jobs');
       setMyJobs(Array.isArray(res.data) ? res.data : []);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to load my jobs');
+      setError(getRecruiterErrorMessage(err, 'Failed to load my jobs'));
     } finally {
       setLoading(false);
     }
@@ -124,7 +157,7 @@ export default function RecruiterDashboard() {
       setSelectedJob(response.data);
       setShowViewModal(true);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to get job details');
+      setError(getRecruiterErrorMessage(err, 'Failed to get job details'));
     }
   };
 
@@ -138,24 +171,24 @@ export default function RecruiterDashboard() {
       const response = await api.get(`/application/PostedJob/${job.id}`);
       const applications = Array.isArray(response.data)
         ? response.data
-        : response.data?.applications;
+        : response.data && response.data.applications;
       const applicantApplications = Array.isArray(applications) ? applications : [];
       const applicationsWithResumes = await Promise.all(
         applicantApplications.map(async (application: Application) => {
           if (application.resume) return application;
 
-          const applicant = (application.student || application.user || application.applicant) as ApplicantData | undefined;
-          const applicantId =
-            application.studentId ??
-            application.userId ??
-            applicant?.id ??
-            applicant?.userId ??
-            applicant?.user?.id;
+          const applicant = (application.student || application.user || application.applicant) as ApplicantData;
+          const applicantId = application.studentId || application.userId ||
+            (applicant && applicant.id) ||
+            (applicant && applicant.userId) ||
+            (applicant && applicant.user && applicant.user.id);
           if (!applicantId) return application;
 
           try {
             const resumeResponse = await api.get(`/resume/student/${applicantId}`);
-            const resume = resumeResponse.data?.resume || resumeResponse.data;
+            const resume = resumeResponse.data && resumeResponse.data.resume
+              ? resumeResponse.data.resume
+              : resumeResponse.data;
             return { ...application, resume };
           } catch {
             return application;
@@ -166,8 +199,15 @@ export default function RecruiterDashboard() {
       setSelectedApplicants(applicationsWithResumes);
     } catch (err: unknown) {
       setShowApplicantsModal(false);
-      const response = (err as { response?: { data?: { message?: string } } }).response;
-      setError(response?.data?.message || 'Failed to load applicants');
+      const response = (err as {
+        response: {
+          data: { message: string };
+        } | null;
+      }).response;
+      const message = response && response.data && response.data.message
+        ? response.data.message
+        : 'Failed to load applicants';
+      setError(message);
     } finally {
       setApplicantsLoading(false);
     }
@@ -175,7 +215,7 @@ export default function RecruiterDashboard() {
 
   const getApplicantValue = (application: Application, key: string) => {
     const applicant = application.student || application.user || application.applicant;
-    return applicant?.[key] as string | undefined;
+    return applicant ? applicant[key] as string : '';
   };
 
   const handleUpdateApplicationStatus = async (
@@ -192,9 +232,11 @@ export default function RecruiterDashboard() {
         `/application/PostedJob/${applicationId}/status`,
         { status: normalizedStatus },
       );
-      const updatedApplication = response.data?.data || response.data;
+      const updatedApplication = response.data && response.data.data
+        ? response.data.data
+        : response.data;
       const savedStatus =
-        typeof updatedApplication?.status === 'string'
+        updatedApplication && typeof updatedApplication.status === 'string'
           ? updatedApplication.status.toLowerCase()
           : normalizedStatus;
 
@@ -205,10 +247,17 @@ export default function RecruiterDashboard() {
             : application,
         ),
       );
+      setDashboardApplications((currentApplications) =>
+        currentApplications.map((application) =>
+          application.id === applicationId
+            ? { ...application, status: savedStatus }
+            : application,
+        ),
+      );
       setSuccess('Application status updated successfully');
       setTimeout(() => setSuccess(''), 2000);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to update application status');
+      setError(getRecruiterErrorMessage(err, 'Failed to update application status'));
     } finally {
       setUpdatingApplicationId(null);
     }
@@ -216,8 +265,8 @@ export default function RecruiterDashboard() {
 
   const getResumeUrl = (application: Application) => {
     const applicant = application.student || application.user || application.applicant;
-    const resume = application.resume || applicant?.resume as Application['resume'];
-    const filePath = resume?.filePath;
+    const resume = application.resume || (applicant && applicant.resume as Application['resume']);
+    const filePath = resume && resume.filePath;
     return filePath
       ? `/api/backend/${filePath.replace(/^\.\//, '').replace(/\\/g, '/')}`
       : null;
@@ -225,7 +274,7 @@ export default function RecruiterDashboard() {
 
   const getApplicantResume = (application: Application) => {
     const applicant = application.student || application.user || application.applicant;
-    return application.resume || applicant?.resume as Application['resume'];
+    return application.resume || (applicant && applicant.resume as Application['resume']);
   };
 
   const handleCreateJob = async (e: React.FormEvent) => {
@@ -234,22 +283,38 @@ export default function RecruiterDashboard() {
     setSuccess('');
 
     try {
+      const salary = Number(newJob.salary);
+
+      if (!Number.isFinite(salary) || salary <= 0) {
+        setError('Please enter a valid salary greater than zero');
+        return;
+      }
+
       const payload = {
-        title: newJob.title,
-        company: newJob.company,
-        description: newJob.description,
-        salary: Number(newJob.salary),
-        location: newJob.location,
+        title: newJob.title.trim(),
+        company: newJob.company.trim(),
+        description: newJob.description.trim(),
+        salary,
+        location: newJob.location.trim(),
       };
 
-      await api.post('/job', payload);
+      if (!payload.title || !payload.company || !payload.description || !payload.location) {
+        setError('Please complete all job fields');
+        return;
+      }
+
+      await api.post('/job', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       setSuccess('Job posted successfully');
       setShowCreateModal(false);
       setNewJob({ title: '', company: '', description: '', salary: '', location: '' });
       fetchDashboardData();
       setTimeout(() => setSuccess(''), 2000);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to post job');
+      setError(getRecruiterErrorMessage(err, 'Failed to post job'));
     }
   };
 
@@ -272,20 +337,24 @@ export default function RecruiterDashboard() {
 
     try {
       const payload = {
-        title: editJob.title,
-        company: editJob.company,
-        description: editJob.description,
+        title: editJob.title.trim(),
+        company: editJob.company.trim(),
+        description: editJob.description.trim(),
         salary: Number(editJob.salary),
-        location: editJob.location,
+        location: editJob.location.trim(),
       };
 
-      await api.patch(`/job/${editJob.id}`, payload);
+      await api.patch(`/job/${editJob.id}`, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       setSuccess('Job updated successfully');
       setShowEditModal(false);
       fetchDashboardData();
       setTimeout(() => setSuccess(''), 2000);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to update job');
+      setError(getRecruiterErrorMessage(err, 'Failed to update job'));
     }
   };
 
@@ -299,7 +368,7 @@ export default function RecruiterDashboard() {
       setAllJobs((prev) => prev.filter((j) => j.id !== id));
       setTimeout(() => setSuccess(''), 2000);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to delete job');
+      setError(getRecruiterErrorMessage(err, 'Failed to delete job'));
     }
   };
 
@@ -384,14 +453,16 @@ export default function RecruiterDashboard() {
                   </div>
 
                   <div className="rounded-lg border border-slate-200/70 border-l-4 border-l-blue-600 bg-white py-6 px-4 text-center shadow-xs">
-                    <p className="text-3xl font-extrabold tracking-tight text-blue-600">0</p>
+                    <p className="text-3xl font-extrabold tracking-tight text-blue-600">{dashboardApplications.length}</p>
                     <p className="mt-2 text-xs font-bold tracking-wider text-slate-600 uppercase">
                       TOTAL APPLICATIONS
                     </p>
                   </div>
 
                   <div className="rounded-lg border border-slate-200/70 border-l-4 border-l-emerald-600 bg-white py-6 px-4 text-center shadow-xs">
-                    <p className="text-3xl font-extrabold tracking-tight text-emerald-600">0</p>
+                    <p className="text-3xl font-extrabold tracking-tight text-emerald-600">
+                      {dashboardApplications.filter((application) => application.status.toLowerCase() === 'accepted').length}
+                    </p>
                     <p className="mt-2 text-xs font-bold tracking-wider text-slate-600 uppercase">
                       ACCEPTED
                     </p>
@@ -446,6 +517,9 @@ export default function RecruiterDashboard() {
                           key={job.id}
                           job={job}
                           onView={handleViewJob}
+                          onApplicants={undefined}
+                          onEdit={undefined}
+                          onDelete={undefined}
                         />
                       ))}
                     </div>
@@ -622,7 +696,7 @@ export default function RecruiterDashboard() {
                               rel="noopener noreferrer"
                               className="inline-flex rounded-md bg-[#3b28c8] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#3120ab]"
                             >
-                              View CV{resume?.fileName ? `: ${resume.fileName}` : ''}
+                              View CV{resume && resume.fileName ? `: ${resume.fileName}` : ''}
                             </a>
                           ) : (
                             <span className="text-xs text-slate-400">CV not uploaded</span>

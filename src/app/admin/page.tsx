@@ -26,32 +26,39 @@ interface Job {
   title: string;
   company: string;
   salary: number;
-  location?: string;
-  description?: string;
+  location: string;
+  description: string;
 }
 interface Application {
   id: number;
-  jobId?: number;
-  userId?: number;
-  studentId?: number;
-  status?: string;
-  appliedAt?: string;
-  job?: {
-    id?: number;
-    title?: string;
-    company?: string;
+  jobId: number;
+  userId: number;
+  studentId: number;
+  status: string;
+  appliedAt: string;
+  job: {
+    id: number;
+    title: string;
+    company: string;
   };
-  student?: {
-    id?: number;
-    fullName?: string;
-    email?: string;
+  student: {
+    id: number;
+    fullName: string;
+    email: string;
   };
-  user?: {
-    id?: number;
-    fullName?: string;
-    email?: string;
+  user: {
+    id: number;
+    fullName: string;
+    email: string;
   };
 }
+
+const getErrorMessage = (error: any, fallback: string) => {
+  if (error && error.response && error.response.data && error.response.data.message) {
+    return error.response.data.message;
+  }
+  return fallback;
+};
 export default function AdminDashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'dashboard' | 'users' | 'jobs' | 'applications'>('dashboard');
@@ -67,6 +74,8 @@ export default function AdminDashboard() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
+
+
   const fetchDashboard = async () => {
     setLoading(true);
     try {
@@ -85,17 +94,23 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+
+
   const fetchUsers = async () => {
     setLoading(true);
     try {
       const response = await api.get('/admin/users');
       setUsers(response.data);
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Failed to get users');
+      setError(getErrorMessage(error, 'Failed to get users'));
     } finally {
       setLoading(false);
     }
   };
+
+
+
+
   const handleDeleteUser = async (id: number) => {
     if (!confirm('Are you sure you want to delete this user?')) return;
     try {
@@ -104,20 +119,24 @@ export default function AdminDashboard() {
       setUsers((prev) => prev.filter((u) => u.id !== id));
       setTimeout(() => setSuccess(''), 2000);
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Failed to delete user');
+      setError(getErrorMessage(error, 'Failed to delete user'));
     }
   };
+
+
   const fetchJobs = async () => {
     setLoading(true);
     try {
       const response = await api.get('/admin/jobs');
       setJobs(response.data);
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Failed to get jobs');
+      setError(getErrorMessage(error, 'Failed to get jobs'));
     } finally {
       setLoading(false);
     }
   };
+
+
   const handleDeleteJob = async (id: number) => {
     if (!confirm('Are you sure you want to delete this job?')) return;
     try {
@@ -126,20 +145,26 @@ export default function AdminDashboard() {
       setJobs((prev) => prev.filter((j) => j.id !== id));
       setTimeout(() => setSuccess(''), 2000);
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Failed to delete job');
+      setError(getErrorMessage(error, 'Failed to delete job'));
     }
   };
+
+
+
   const fetchApplications = async () => {
     setLoading(true);
     try {
       const response = await api.get('/admin/applications');
       setApplications(response.data);
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Failed to get applications');
+      setError(getErrorMessage(error, 'Failed to get applications'));
     } finally {
       setLoading(false);
     }
   };
+
+
+
   useEffect(() => {
     setError('');
     setSuccess('');
@@ -153,11 +178,20 @@ export default function AdminDashboard() {
       fetchApplications();
     }
   }, [activeTab]);
+
+
+
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     router.push('/login');
   };
+
+
+
   const maxMetric = Math.max(metrics.totalUsers, metrics.students, metrics.recruiters, metrics.totalJobs, 1);
+ 
+ 
+ 
   return (
     <ProtectedRoute role="admin">
     <div className="flex h-screen overflow-hidden bg-[#f4f7fb] text-slate-800 antialiased font-sans">
@@ -323,7 +357,9 @@ export default function AdminDashboard() {
                           </div>
                           <div className="mt-3 flex items-center gap-3">
                             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-sm font-bold text-slate-700">
-                              {user.fullName?.charAt(0)?.toUpperCase() || 'U'}
+                              {user.fullName && user.fullName.charAt(0)
+                                ? user.fullName.charAt(0).toUpperCase()
+                                : 'U'}
                             </div>
                             <div className="min-w-0">
                               <h3 className="text-sm font-bold tracking-tight text-slate-900 truncate">{user.fullName}</h3>
@@ -372,9 +408,9 @@ export default function AdminDashboard() {
                   <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {[
                       ['Total', applications.length, 'text-[#3b28c8]'],
-                      ['Pending', applications.filter((app) => app.status?.toLowerCase() === 'pending').length, 'text-amber-600'],
-                      ['Interview', applications.filter((app) => app.status?.toLowerCase() === 'interview').length, 'text-indigo-600'],
-                      ['Accepted', applications.filter((app) => app.status?.toLowerCase() === 'accepted').length, 'text-emerald-600'],
+                      ['Pending', applications.filter((app) => app.status && app.status.toLowerCase() === 'pending').length, 'text-amber-600'],
+                      ['Interview', applications.filter((app) => app.status && app.status.toLowerCase() === 'interview').length, 'text-indigo-600'],
+                      ['Accepted', applications.filter((app) => app.status && app.status.toLowerCase() === 'accepted').length, 'text-emerald-600'],
                     ].map(([label, value, color]) => (
                       <div key={label} className="rounded-lg border border-slate-200/70 bg-white px-4 py-3 shadow-xs">
                         <p className={`text-xl font-bold ${color}`}>{value}</p>
