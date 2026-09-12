@@ -3,6 +3,7 @@ import { BriefcaseBusiness, FileText, GraduationCap, LayoutDashboard, LogOut, Se
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
+import ProtectedRoute from '@/app/components/ProtectedRoute'
 
 export      default function Layout({children}: {children: React.ReactNode}) {
 
@@ -23,7 +24,8 @@ export      default function Layout({children}: {children: React.ReactNode}) {
         router.replace('/login');
     };
   return (
-    <div className=" bg-[#f7f7ff] text-[#20243a] min-h-screen">
+        <ProtectedRoute role="student">
+        <div className=" bg-[#f7f7ff] text-[#20243a] min-h-screen">
 
         <aside className='fixed left-0 top-0 h-screen w-[260px] border-r border-[#dedff0] bg-[#f1f2ff]'>
             <div id="logo" className='px-6 py-7'>
@@ -121,11 +123,12 @@ export      default function Layout({children}: {children: React.ReactNode}) {
 
         </aside>
 
-        <main className="ml-[260px] min-h-screen border-2 border-amber-50">
-            <div className="border-2 border-amber-700 max-w-[1500px] mx-auto px-10 py-8 ">
+        <main className="ml-[260px] min-h-screen">
+            <div className="max-w-[1500px] mx-auto px-10 py-8">
                 {children}
             </div>
         </main>
     </div>
+        </ProtectedRoute>
   )
 }

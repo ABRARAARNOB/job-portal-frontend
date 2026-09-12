@@ -7,6 +7,7 @@ import { api } from '@/lib/axios';
 import Sidebar from './components/sidebar';
 import JobCard from './components/jobcard';
 import ApplicationCard from './components/applicationcard';
+import ProtectedRoute from '@/app/components/ProtectedRoute';
 
 interface DashboardMetrics {
   totalUsers: number;
@@ -30,9 +31,26 @@ interface Job {
 }
 interface Application {
   id: number;
-  jobId: number;
-  userId: number;
-  status: string;
+  jobId?: number;
+  userId?: number;
+  studentId?: number;
+  status?: string;
+  appliedAt?: string;
+  job?: {
+    id?: number;
+    title?: string;
+    company?: string;
+  };
+  student?: {
+    id?: number;
+    fullName?: string;
+    email?: string;
+  };
+  user?: {
+    id?: number;
+    fullName?: string;
+    email?: string;
+  };
 }
 export default function AdminDashboard() {
   const router = useRouter();
@@ -141,6 +159,7 @@ export default function AdminDashboard() {
   };
   const maxMetric = Math.max(metrics.totalUsers, metrics.students, metrics.recruiters, metrics.totalJobs, 1);
   return (
+    <ProtectedRoute role="admin">
     <div className="flex h-screen overflow-hidden bg-[#f4f7fb] text-slate-800 antialiased font-sans">
       <Sidebar
         activeTab={activeTab}
@@ -349,6 +368,21 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between pb-5">
                   <h2 className="text-lg font-bold tracking-tight text-slate-900">Applications ({applications.length})</h2>
                 </div>
+                {applications.length > 0 && (
+                  <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {[
+                      ['Total', applications.length, 'text-[#3b28c8]'],
+                      ['Pending', applications.filter((app) => app.status?.toLowerCase() === 'pending').length, 'text-amber-600'],
+                      ['Interview', applications.filter((app) => app.status?.toLowerCase() === 'interview').length, 'text-indigo-600'],
+                      ['Accepted', applications.filter((app) => app.status?.toLowerCase() === 'accepted').length, 'text-emerald-600'],
+                    ].map(([label, value, color]) => (
+                      <div key={label} className="rounded-lg border border-slate-200/70 bg-white px-4 py-3 shadow-xs">
+                        <p className={`text-xl font-bold ${color}`}>{value}</p>
+                        <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">{label}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 {applications.length === 0 ? (
                   <div className="rounded-lg border border-slate-200/70 bg-white p-12 text-center text-sm font-medium text-slate-400 shadow-xs">
                     No applications found.
@@ -366,5 +400,6 @@ export default function AdminDashboard() {
         )}
       </main>
     </div>
+    </ProtectedRoute>
   );
 }

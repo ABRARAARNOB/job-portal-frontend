@@ -8,6 +8,7 @@ import { CalendarCheck, CheckCircle, Clock, FileText } from "lucide-react";
 interface User {
     id: number;
     email: string;
+  fullName?: string;
     role: string;
 }
 
@@ -118,7 +119,7 @@ const formatStatus = (status: string) => {
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight text-[#20243a]">
-          Welcome {user?.email}!
+          Welcome {user?.fullName || 'Student'}!
         </h1>
 
         <p className="mt-2 text-sm text-[#777b91]">

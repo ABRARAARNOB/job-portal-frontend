@@ -75,7 +75,7 @@ export default function JobCard({
                 type="button"
                 onClick={() => onApply(job.id)}
                 disabled={applying}
-                className="flex items-center gap-2 rounded-lg bg-[#4134d8] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#3529bd] disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#4134d8] to-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-px hover:from-[#3529bd] hover:to-indigo-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
                 >
                 <Send size={15} />
 

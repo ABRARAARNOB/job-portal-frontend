@@ -40,7 +40,7 @@ export default function JobCard({ job, onDelete }: JobCardProps) {
       <div className="mt-3.5 flex justify-end border-t border-slate-100 pt-3">
         <button
           onClick={() => onDelete(job.id)}
-          className="rounded-md bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 transition"
+          className="rounded-md bg-gradient-to-br from-red-50 to-rose-100 px-3 py-2 text-xs font-semibold text-red-600 shadow-sm transition hover:-translate-y-px hover:from-red-100 hover:to-rose-200 hover:shadow-md"
         >
           Delete Job
         </button>

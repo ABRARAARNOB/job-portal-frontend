@@ -6,6 +6,7 @@ import { api } from '@/lib/axios';
 
 import Sidebar from './components/sidebar';
 import JobCard from './components/jobcard';
+import ProtectedRoute from '@/app/components/ProtectedRoute';
 
 interface Job {
   id: number;
@@ -40,6 +41,13 @@ type ApplicantData = Record<string, unknown> & {
   };
 };
 
+const applicationStatuses = [
+  { value: 'pending', label: 'Pending', className: 'amber' },
+  { value: 'interview', label: 'Interview', className: 'indigo' },
+  { value: 'accepted', label: 'Accepted', className: 'emerald' },
+  { value: 'rejected', label: 'Rejected', className: 'red' },
+];
+
 export default function RecruiterDashboard() {
   const router = useRouter();
 
@@ -55,6 +63,8 @@ export default function RecruiterDashboard() {
   const [selectedApplicantsJob, setSelectedApplicantsJob] = useState<Job | null>(null);
   const [showApplicantsModal, setShowApplicantsModal] = useState<boolean>(false);
   const [applicantsLoading, setApplicantsLoading] = useState<boolean>(false);
+  const [updatingApplicationId, setUpdatingApplicationId] = useState<number | null>(null);
+  const [selectedStatuses, setSelectedStatuses] = useState<Record<number, string>>({});
 
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [newJob, setNewJob] = useState({
@@ -168,6 +178,42 @@ export default function RecruiterDashboard() {
     return applicant?.[key] as string | undefined;
   };
 
+  const handleUpdateApplicationStatus = async (
+    applicationId: number,
+    status: string,
+  ) => {
+    try {
+      setUpdatingApplicationId(applicationId);
+      setError('');
+
+      const normalizedStatus = status.toLowerCase();
+
+      const response = await api.patch(
+        `/application/PostedJob/${applicationId}/status`,
+        { status: normalizedStatus },
+      );
+      const updatedApplication = response.data?.data || response.data;
+      const savedStatus =
+        typeof updatedApplication?.status === 'string'
+          ? updatedApplication.status.toLowerCase()
+          : normalizedStatus;
+
+      setSelectedApplicants((currentApplications) =>
+        currentApplications.map((application) =>
+          application.id === applicationId
+            ? { ...application, status: savedStatus }
+            : application,
+        ),
+      );
+      setSuccess('Application status updated successfully');
+      setTimeout(() => setSuccess(''), 2000);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to update application status');
+    } finally {
+      setUpdatingApplicationId(null);
+    }
+  };
+
   const getResumeUrl = (application: Application) => {
     const applicant = application.student || application.user || application.applicant;
     const resume = application.resume || applicant?.resume as Application['resume'];
@@ -271,6 +317,7 @@ export default function RecruiterDashboard() {
   };
 
   return (
+    <ProtectedRoute role="recruiter">
     <div className="flex h-screen overflow-hidden bg-[#f4f7fb] text-slate-800 antialiased font-sans">
       <Sidebar
         activeTab={activeTab}
@@ -527,9 +574,44 @@ export default function RecruiterDashboard() {
                               {application.appliedAt && <p>Applied {new Date(application.appliedAt).toLocaleDateString()}</p>}
                             </div>
                           </div>
-                          <span className="rounded bg-amber-50 px-2.5 py-1 text-xs font-semibold capitalize text-amber-700">
-                            {application.status || 'pending'}
-                          </span>
+                          <div className="w-full rounded-xl border border-slate-200 bg-white p-2.5 shadow-sm sm:w-auto">
+                            <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                              Change application status
+                            </p>
+                            <div className="flex items-center gap-2">
+                            <select
+                              value={selectedStatuses[application.id] || (application.status || 'pending').toLowerCase()}
+                              disabled={updatingApplicationId === application.id}
+                              onChange={(event) =>
+                                setSelectedStatuses((current) => ({
+                                  ...current,
+                                  [application.id]: event.target.value,
+                                }))
+                              }
+                              className="min-h-10 min-w-[148px] flex-1 cursor-pointer rounded-lg border border-indigo-200 bg-gradient-to-br from-white to-slate-50 px-3 text-xs font-bold text-slate-700 outline-none transition hover:border-indigo-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 sm:flex-none"
+                              aria-label={`Select status for application ${application.id}`}
+                            >
+                              {applicationStatuses.map((statusOption) => (
+                                <option key={statusOption.value} value={statusOption.value}>
+                                  {statusOption.label}
+                                </option>
+                              ))}
+                            </select>
+                            <button
+                              type="button"
+                              disabled={updatingApplicationId === application.id}
+                              onClick={() =>
+                                handleUpdateApplicationStatus(
+                                  application.id,
+                                  selectedStatuses[application.id] || (application.status || 'pending').toLowerCase(),
+                                )
+                              }
+                              className="min-h-10 rounded-lg bg-gradient-to-r from-[#3b28c8] to-indigo-600 px-3.5 text-xs font-bold text-white shadow-sm transition hover:-translate-y-px hover:from-[#3120ab] hover:to-indigo-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-wait disabled:opacity-60"
+                            >
+                              {updatingApplicationId === application.id ? 'Saving...' : 'Change status'}
+                            </button>
+                            </div>
+                          </div>
                         </div>
 
                         <div className="mt-3 border-t border-slate-200 pt-3">
@@ -768,5 +850,6 @@ export default function RecruiterDashboard() {
         )}
       </main>
     </div>
+    </ProtectedRoute>
   );
 }

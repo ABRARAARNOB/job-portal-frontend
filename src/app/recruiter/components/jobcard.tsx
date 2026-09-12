@@ -20,65 +20,78 @@ export default function JobCard({ job, onView, onApplicants, onEdit, onDelete }:
   const isManageable = Boolean(onEdit && onDelete);
 
   return (
-    <div className="flex flex-col justify-between rounded-lg border border-slate-200/70 bg-white p-4 shadow-xs transition hover:shadow-sm">
+    <div className="group relative flex min-h-[285px] flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg">
+      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#3b28c8] via-indigo-500 to-emerald-400" />
       <div>
-        <div className="flex items-center justify-between text-xs text-slate-500">
-          <span className="font-semibold text-slate-600">Job #{job.id}</span>
+        <div className="flex items-center justify-between gap-3 text-xs text-slate-500">
+          <span className="rounded-full bg-slate-100 px-2.5 py-1 font-semibold text-slate-600">
+            Job #{job.id}
+          </span>
           {job.location && (
-            <span className="rounded bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
+            <span className="truncate rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">
               {job.location}
             </span>
           )}
         </div>
 
-        <h3 className="mt-2 text-sm font-bold tracking-tight text-slate-900 line-clamp-1">
+        <h3 className="mt-4 min-h-10 text-base font-bold leading-5 tracking-tight text-slate-900 line-clamp-2">
           {job.title}
         </h3>
-        <p className="text-xs font-normal text-slate-500">{job.company || 'N/A'}</p>
+        <p className="mt-1 text-xs font-medium text-slate-500">{job.company || 'Company not specified'}</p>
 
         {job.description && (
-          <p className="mt-2 text-xs font-normal text-slate-600 line-clamp-2 leading-relaxed">
+          <p className="mt-4 min-h-9 text-xs leading-relaxed text-slate-600 line-clamp-2">
             {job.description}
           </p>
         )}
 
-        <p className="mt-3 text-sm font-bold text-[#3b28c8]">
-          {job.salary ? `$${job.salary.toLocaleString()}` : 'Negotiable'}
-        </p>
+        <div className="mt-4 flex items-end justify-between border-t border-slate-100 pt-3">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Compensation</p>
+            <p className="mt-0.5 text-sm font-bold text-[#3b28c8]">
+              {job.salary ? `$${job.salary.toLocaleString()}` : 'Negotiable'}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="mt-3.5 border-t border-slate-100 pt-3">
+      <div className="mt-5 border-t border-slate-100 pt-4">
         {isManageable ? (
           <div className="grid grid-cols-2 gap-2">
             <button
+              type="button"
               onClick={() => onView(job.id)}
-              className="inline-flex min-h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
+              className="inline-flex min-h-9 items-center justify-center rounded-md bg-gradient-to-br from-slate-50 to-slate-200 px-2.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:-translate-y-px hover:from-slate-100 hover:to-slate-300 hover:shadow-md"
             >
               View
             </button>
             <button
+              type="button"
               onClick={() => onApplicants && onApplicants(job)}
-              className="inline-flex min-h-9 items-center justify-center rounded-md border border-emerald-200 bg-white px-2.5 text-xs font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50"
+              className="inline-flex min-h-9 items-center justify-center rounded-md bg-gradient-to-br from-emerald-500 to-teal-600 px-2.5 text-xs font-semibold text-white shadow-sm transition hover:-translate-y-px hover:from-emerald-600 hover:to-teal-700 hover:shadow-md"
             >
               Applicants
             </button>
             <button
+              type="button"
               onClick={() => onEdit && onEdit(job)}
-              className="inline-flex min-h-9 items-center justify-center rounded-md border border-indigo-200 bg-white px-2.5 text-xs font-semibold text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50"
+              className="inline-flex min-h-9 items-center justify-center rounded-md bg-gradient-to-br from-indigo-50 to-indigo-100 px-2.5 text-xs font-semibold text-indigo-700 shadow-sm transition hover:-translate-y-px hover:from-indigo-100 hover:to-indigo-200 hover:shadow-md"
             >
               Edit
             </button>
             <button
+              type="button"
               onClick={() => onDelete && onDelete(job.id)}
-              className="inline-flex min-h-9 items-center justify-center rounded-md border border-red-200 bg-white px-2.5 text-xs font-semibold text-red-600 shadow-sm transition hover:border-red-300 hover:bg-red-50"
+              className="inline-flex min-h-9 items-center justify-center rounded-md bg-gradient-to-br from-red-50 to-rose-100 px-2.5 text-xs font-semibold text-red-600 shadow-sm transition hover:-translate-y-px hover:from-red-100 hover:to-rose-200 hover:shadow-md"
             >
               Delete
             </button>
           </div>
         ) : (
           <button
+            type="button"
             onClick={() => onView(job.id)}
-            className="w-full rounded-md bg-[#3b28c8] py-1.5 text-xs font-medium text-white hover:bg-[#3120ab] transition"
+            className="w-full rounded-md bg-gradient-to-r from-[#3b28c8] to-indigo-600 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:-translate-y-px hover:from-[#3120ab] hover:to-indigo-700 hover:shadow-md"
           >
             View Details
           </button>
