@@ -27,17 +27,17 @@ export default function JobCard({
   onApply,
 }: JobCardProps) {
   return (
-    <div className="rounded-xl border border-[#e1e1ee] bg-white p-6 shadow-sm transition hover:shadow-md">
+    <div className="group rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_8px_24px_-12px_rgba(30,41,59,0.2)] transition duration-200 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-[0_20px_38px_-18px_rgba(67,56,202,0.28)]">
 
         {/* Header */}
         <div className="flex items-start gap-3">
 
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#eeedff] text-[#4134d8]">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-[#4134d8] ring-1 ring-indigo-100 transition group-hover:bg-[#4134d8] group-hover:text-white">
             <BriefcaseBusiness size={21} />
             </div>
 
             <div>
-            <h2 className="text-base font-semibold text-[#20243a]">
+            <h2 className="text-base font-bold tracking-tight text-[#20243a]">
                 {job.title}
             </h2>
 
@@ -75,7 +75,7 @@ export default function JobCard({
                 type="button"
                 onClick={() => onApply(job.id)}
                 disabled={applying}
-                className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#4134d8] to-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-px hover:from-[#3529bd] hover:to-indigo-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#4134d8] to-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-px hover:from-[#3529bd] hover:to-indigo-700 hover:shadow-xl hover:shadow-indigo-200 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                 <Send size={15} />
 

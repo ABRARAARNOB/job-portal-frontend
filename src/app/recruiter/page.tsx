@@ -388,46 +388,20 @@ export default function RecruiterDashboard() {
   return (
     <ProtectedRoute role="recruiter">
     <div className="flex h-screen overflow-hidden bg-[#f4f7fb] text-slate-800 antialiased font-sans">
-      <Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onPostJob={() => setShowCreateModal(true)}
-        onLogout={handleLogout}
-      />
-
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onPostJob={() => setShowCreateModal(true)} onLogout={handleLogout} />
       <main className="flex-1 h-full overflow-y-auto p-8 lg:p-10">
         <div className="flex items-center justify-between pb-8">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 capitalize">
-              {activeTab === 'dashboard' ? 'Recruiter Dashboard' : 'My Jobs'}
-            </h1>
-            <p className="mt-1 text-sm text-slate-500 font-normal">
-              Welcome back. Here&apos;s an overview of your recruitment activities.
-            </p>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 capitalize">{activeTab === 'dashboard' ? 'Recruiter Dashboard' : 'My Jobs'}</h1>
+            <p className="mt-1 text-sm text-slate-500 font-normal">Welcome back. Here&apos;s an overview of your recruitment activities.</p>
           </div>
-
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 rounded-xl bg-[#3b28c8] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#3120ab] transition"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
+          <button onClick={() => setShowCreateModal(true)} className="flex items-center gap-2 rounded-xl bg-[#3b28c8] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#3120ab] transition">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             <span>Post New Job</span>
           </button>
         </div>
-
-        {success && (
-          <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50/80 p-3.5 text-sm font-medium text-emerald-800 shadow-xs">
-            {success}
-          </div>
-        )}
-        {error && (
-          <div className="mb-6 rounded-lg border border-red-200 bg-red-50/80 p-3.5 text-sm font-medium text-red-800 shadow-xs">
-            {error}
-          </div>
-        )}
-
+        {success && <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50/80 p-3.5 text-sm font-medium text-emerald-800 shadow-xs">{success}</div>}
+        {error && <div className="mb-6 rounded-lg border border-red-200 bg-red-50/80 p-3.5 text-sm font-medium text-red-800 shadow-xs">{error}</div>}
         {loading ? (
           <div className="flex h-72 flex-col items-center justify-center gap-3 rounded-lg border border-slate-100 bg-white shadow-xs">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#3b28c8] border-t-transparent" />
@@ -485,7 +459,7 @@ export default function RecruiterDashboard() {
                       No jobs posted yet. Click &quot;+ Post New Job&quot; above to create one.
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                       {myJobs.map((job) => (
                         <JobCard
                           key={job.id}
@@ -537,7 +511,7 @@ export default function RecruiterDashboard() {
                     No jobs found.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {myJobs.map((job) => (
                       <JobCard
                         key={job.id}
@@ -552,9 +526,6 @@ export default function RecruiterDashboard() {
                 )}
               </div>
             )}
-          </>
-        )}
-
         {showViewModal && selectedJob && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
             <div className="w-full max-w-md rounded-lg border border-slate-200/70 bg-white p-6 shadow-xl">
@@ -921,6 +892,8 @@ export default function RecruiterDashboard() {
               </form>
             </div>
           </div>
+        )}
+          </>
         )}
       </main>
     </div>

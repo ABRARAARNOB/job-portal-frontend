@@ -96,7 +96,7 @@ useEffect(() => {
 
 
     return (
-        <div className="flex min-h-screen flex-col bg-[#f7f6fd] px-4 py-10">
+        <div className="flex min-h-screen flex-col bg-gradient-to-br from-indigo-50 via-[#f8f9ff] to-violet-50 px-4 py-10">
             <div className="text-center">
                 <span className="text-2xl font-extrabold tracking-tight text-indigo-600">
                     UniCareer
@@ -104,7 +104,7 @@ useEffect(() => {
             </div>
 
             <div className="flex flex-1 items-center justify-center">
-                <div className="w-full max-w-md rounded-2xl border-l-4 border-indigo-600 bg-white p-8 shadow-[0_20px_45px_-15px_rgba(60,50,150,0.25)] sm:p-10">
+                <div className="w-full max-w-md rounded-3xl border border-white/80 border-l-4 border-indigo-600 bg-white/95 p-8 shadow-[0_24px_60px_-20px_rgba(60,50,150,0.3)] backdrop-blur sm:p-10">
                     <div className="text-center">
                         <h1 className="text-3xl font-bold text-gray-900">
                             Welcome Back
@@ -130,7 +130,7 @@ useEffect(() => {
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="student@university.edu"
                                 required
-                                className="w-full rounded-lg border border-gray-200 py-2.5 px-3 text-gray-700 placeholder-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                                className="w-full rounded-xl border border-slate-200 bg-slate-50/60 py-3 px-3.5 text-gray-700 placeholder-gray-400 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                             />
                         </div>
 
@@ -151,7 +151,7 @@ useEffect(() => {
                                 }
                                 placeholder="Enter your password"
                                 required
-                                className="w-full rounded-lg border border-gray-200 py-2.5 px-3 text-gray-700 placeholder-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                                className="w-full rounded-xl border border-slate-200 bg-slate-50/60 py-3 px-3.5 text-gray-700 placeholder-gray-400 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                             />
                         </div>
 
@@ -167,7 +167,7 @@ useEffect(() => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full rounded-lg bg-[#3b28c8] py-3 font-semibold text-white transition hover:bg-[#31209f] disabled:opacity-60"
+                            className="w-full rounded-xl bg-gradient-to-r from-[#3b28c8] to-indigo-600 py-3.5 font-semibold text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-px hover:from-[#31209f] hover:to-indigo-700 hover:shadow-xl disabled:opacity-60"
                         >
                             {loading ? 'Logging in...' : 'Login'}
                         </button>

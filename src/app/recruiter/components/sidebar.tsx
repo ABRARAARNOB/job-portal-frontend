@@ -9,20 +9,20 @@ interface SidebarProps {
 
 export default function Sidebar({ activeTab, setActiveTab, onPostJob, onLogout }: SidebarProps) {
   return (
-    <aside className="flex w-64 h-full shrink-0 flex-col justify-between border-r border-slate-200/80 bg-[#f8faff] p-5">
+    <aside className="flex h-full w-64 shrink-0 flex-col justify-between bg-[#2f63d8] p-4 shadow-[8px_0_28px_-14px_rgba(30,64,175,0.45)]">
       <div>
-        <div className="px-3 pt-2 pb-6">
-          <h2 className="text-base font-bold tracking-tight text-[#3b28c8] leading-none">Recruiter Portal</h2>
-          <p className="mt-1 text-xs text-slate-500 font-normal">University Career Hub</p>
+        <div className="border-b border-white/15 px-3 pb-6 pt-3">
+          <h2 className="text-base font-bold leading-none tracking-tight text-white">Recruiter Portal</h2>
+          <p className="mt-1.5 text-xs font-medium text-blue-100/80">University Career Hub</p>
         </div>
 
-        <nav className="space-y-1.5">
+        <nav className="mt-5 space-y-1.5">
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`flex w-full items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+            className={`flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-all duration-200 ${
               activeTab === 'dashboard'
-                ? 'bg-[#3b28c8] text-white shadow-sm'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
+                ? 'bg-white text-[#2455c5] shadow-[0_5px_12px_-7px_rgba(15,23,42,0.45)]'
+                : 'text-blue-50/90 hover:bg-white/12 hover:text-white'
             }`}
           >
             <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -33,10 +33,10 @@ export default function Sidebar({ activeTab, setActiveTab, onPostJob, onLogout }
 
           <button
             onClick={() => setActiveTab('my-jobs')}
-            className={`flex w-full items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+            className={`flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-all duration-200 ${
               activeTab === 'my-jobs'
-                ? 'bg-[#3b28c8] text-white shadow-sm'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
+                ? 'bg-white text-[#2455c5] shadow-[0_5px_12px_-7px_rgba(15,23,42,0.45)]'
+                : 'text-blue-50/90 hover:bg-white/12 hover:text-white'
             }`}
           >
             <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
@@ -47,10 +47,10 @@ export default function Sidebar({ activeTab, setActiveTab, onPostJob, onLogout }
         </nav>
       </div>
 
-      <div className="space-y-2 pt-4">
+      <div className="space-y-2 border-t border-white/15 pt-5">
         <button
           onClick={onPostJob}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#3b28c8] py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#3120ab] transition"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-white py-2.5 text-sm font-semibold text-[#2455c5] shadow-[0_6px_14px_-8px_rgba(15,23,42,0.45)] transition-all duration-200 hover:-translate-y-px hover:bg-blue-50 hover:shadow-lg active:translate-y-0"
         >
           <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -60,9 +60,9 @@ export default function Sidebar({ activeTab, setActiveTab, onPostJob, onLogout }
 
         <button
           onClick={onLogout}
-          className="group flex w-full items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50/50 transition"
+          className="group flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium text-blue-100/90 transition-all duration-200 hover:bg-white/12 hover:text-white"
         >
-          <svg className="w-5 h-5 shrink-0 text-slate-400 group-hover:text-red-600 transition" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
+          <svg className="w-5 h-5 shrink-0 text-blue-200 transition group-hover:text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
           </svg>
           <span>Logout</span>

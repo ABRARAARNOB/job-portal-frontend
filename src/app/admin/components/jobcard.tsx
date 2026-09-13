@@ -14,7 +14,7 @@ interface JobCardProps {
 
 export default function JobCard({ job, onDelete }: JobCardProps) {
   return (
-    <div className="flex flex-col justify-between rounded-lg border border-slate-200/70 bg-white p-4 shadow-xs transition hover:shadow-sm">
+    <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_8px_24px_-14px_rgba(30,41,59,0.2)] transition duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-[0_18px_34px_-16px_rgba(67,56,202,0.24)]">
       <div>
         <div className="flex items-center justify-between text-xs text-slate-500">
           <span className="font-semibold text-slate-600">Job #{job.id}</span>
@@ -40,7 +40,7 @@ export default function JobCard({ job, onDelete }: JobCardProps) {
       <div className="mt-3.5 flex justify-end border-t border-slate-100 pt-3">
         <button
           onClick={() => onDelete(job.id)}
-          className="rounded-md bg-gradient-to-br from-red-50 to-rose-100 px-3 py-2 text-xs font-semibold text-red-600 shadow-sm transition hover:-translate-y-px hover:from-red-100 hover:to-rose-200 hover:shadow-md"
+          className="rounded-xl bg-gradient-to-br from-red-50 to-rose-100 px-3.5 py-2 text-xs font-semibold text-red-600 shadow-sm transition hover:-translate-y-px hover:from-red-100 hover:to-rose-200 hover:shadow-md"
         >
           Delete Job
         </button>

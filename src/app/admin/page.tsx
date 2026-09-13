@@ -195,44 +195,22 @@ export default function AdminDashboard() {
   return (
     <ProtectedRoute role="admin">
     <div className="flex h-screen overflow-hidden bg-[#f4f7fb] text-slate-800 antialiased font-sans">
-      <Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onNewAdmin={() => router.push('/registration')}
-        onLogout={handleLogout}
-      />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onNewAdmin={() => router.push('/registration')} onLogout={handleLogout} />
       <main className="flex-1 h-full overflow-y-auto p-8 lg:p-10">
         <div className="flex items-center justify-between pb-8">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 capitalize">
-              {activeTab} Overview
-            </h1>
-            <p className="mt-1 text-sm text-slate-500 font-normal">
-              Welcome back, Admin. Here&apos;s what&apos;s happening today.
-            </p>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 capitalize">{activeTab} Overview</h1>
+            <p className="mt-1 text-sm text-slate-500 font-normal">Welcome back, Admin. Here&apos;s what&apos;s happening today.</p>
           </div>
-          <button
-            onClick={() => {
-              if (activeTab === 'dashboard') fetchDashboard();
-              if (activeTab === 'users') fetchUsers();
-              if (activeTab === 'jobs') fetchJobs();
-              if (activeTab === 'applications') fetchApplications();
-            }}
-            className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50 transition"
-          >
-            Refresh
-          </button>
+          <button onClick={() => {
+            if (activeTab === 'dashboard') fetchDashboard();
+            if (activeTab === 'users') fetchUsers();
+            if (activeTab === 'jobs') fetchJobs();
+            if (activeTab === 'applications') fetchApplications();
+          }} className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50 transition">Refresh</button>
         </div>
-        {success && (
-          <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50/80 p-3.5 text-sm font-medium text-emerald-800 shadow-xs">
-            {success}
-          </div>
-        )}
-        {error && (
-          <div className="mb-6 rounded-lg border border-red-200 bg-red-50/80 p-3.5 text-sm font-medium text-red-800 shadow-xs">
-            {error}
-          </div>
-        )}
+        {success && <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50/80 p-3.5 text-sm font-medium text-emerald-800 shadow-xs">{success}</div>}
+        {error && <div className="mb-6 rounded-lg border border-red-200 bg-red-50/80 p-3.5 text-sm font-medium text-red-800 shadow-xs">{error}</div>}
         {loading ? (
           <div className="flex h-72 flex-col items-center justify-center gap-3 rounded-lg border border-slate-100 bg-white shadow-xs">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#3b28c8] border-t-transparent" />

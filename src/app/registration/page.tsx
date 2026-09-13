@@ -142,11 +142,11 @@ export default function Registration() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#eef2f8] px-4 py-8">
-      <div className="flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl md:flex-row">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-50 via-slate-50 to-violet-50 px-4 py-8">
+      <div className="flex w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/70 bg-white shadow-[0_25px_65px_-24px_rgba(49,46,129,0.32)] md:flex-row">
         
       
-        <div className="flex flex-col justify-between bg-[#2f27ce] p-8 text-white md:w-5/12 md:p-10">
+        <div className="flex flex-col justify-between bg-gradient-to-br from-[#2f27ce] via-indigo-700 to-violet-800 p-8 text-white md:w-5/12 md:p-10">
           <div>
             <h1 className="text-2xl font-bold leading-snug md:text-3xl">
               Build Your Career <br /> With UniCareer
@@ -186,7 +186,7 @@ export default function Registration() {
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Enter your full name"
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-sm text-gray-800 placeholder-gray-400 outline-none transition hover:border-slate-300 focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-100"
               />
             </div>
 
@@ -201,7 +201,7 @@ export default function Registration() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-sm text-gray-800 placeholder-gray-400 outline-none transition hover:border-slate-300 focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-100"
               />
             </div>
 
@@ -225,7 +225,7 @@ export default function Registration() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Create a password"
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-sm text-gray-800 placeholder-gray-400 outline-none transition hover:border-slate-300 focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-100"
               />
             </div>
 
@@ -249,7 +249,7 @@ export default function Registration() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm your password"
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-sm text-gray-800 placeholder-gray-400 outline-none transition hover:border-slate-300 focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-100"
               />
             </div>
 
@@ -263,7 +263,7 @@ export default function Registration() {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-sm text-gray-800 outline-none transition hover:border-slate-300 focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                 >
                   <option value="student">Student</option>
                   <option value="recruiter">Recruiter</option>
@@ -280,7 +280,7 @@ export default function Registration() {
                   name="graduationYear"
                   value={formData.graduationYear}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-sm text-gray-800 placeholder-gray-400 outline-none transition hover:border-slate-300 focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                 />
               </div>
             </div>
@@ -302,7 +302,7 @@ export default function Registration() {
                 value={formData.bio}
                 onChange={handleChange}
                 placeholder="Tell us briefly about yourself..."
-                className="w-full resize-none rounded-lg border border-gray-200 p-3 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+                className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50/60 p-3.5 text-sm text-gray-800 placeholder-gray-400 outline-none transition hover:border-slate-300 focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-100"
               />
             </div>
 
@@ -310,7 +310,7 @@ export default function Registration() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-[#2f27ce] py-3 text-sm font-semibold text-white shadow transition hover:bg-[#251eb0] disabled:opacity-60"
+              className="w-full rounded-xl bg-gradient-to-r from-[#2f27ce] to-indigo-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-px hover:from-[#251eb0] hover:to-indigo-700 hover:shadow-xl disabled:opacity-60"
             >
               {loading ? 'Registering...' : 'Register'}
             </button>

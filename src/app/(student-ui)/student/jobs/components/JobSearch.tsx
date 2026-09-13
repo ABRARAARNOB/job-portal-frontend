@@ -23,7 +23,7 @@ export default function JobSearch({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search jobs by title..."
-        className="w-full rounded-lg border border-[#dedff0] bg-white py-3 pl-11 pr-4 text-sm text-[#20243a] outline-none transition focus:border-[#4134d8]"
+        className="w-full rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm text-[#20243a] shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-[#4134d8] focus:ring-4 focus:ring-indigo-100"
       />
     </div>
   );

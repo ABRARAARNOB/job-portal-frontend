@@ -37,7 +37,7 @@ export default function ApplicationCard({ app }: ApplicationCardProps) {
     : `Job #${app.jobId || 'Unknown'}`;
 
   return (
-    <div className="flex flex-col justify-between rounded-lg border border-slate-200/70 bg-white p-5 shadow-xs transition hover:-translate-y-0.5 hover:shadow-md">
+    <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_8px_24px_-14px_rgba(30,41,59,0.2)] transition duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-[0_18px_34px_-16px_rgba(67,56,202,0.24)]">
       <div>
         <div className="flex items-center justify-between text-xs text-slate-500">
           <span className="font-semibold text-slate-600">Application #{app.id}</span>
@@ -61,7 +61,7 @@ export default function ApplicationCard({ app }: ApplicationCardProps) {
             {applicantName}
           </h3>
           <p className="mt-1 text-xs text-slate-500">{applicantEmail}</p>
-          <div className="mt-3 rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-600">
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 text-xs text-slate-600">
             <p className="font-semibold text-slate-800">{jobTitle}</p>
             {app.job && app.job.company && <p className="mt-0.5">{app.job.company}</p>}
           </div>
