@@ -4,16 +4,14 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import ProtectedRoute from '@/app/components/ProtectedRoute'
-import { api } from '@/lib/axios';
-import React, { useState } from 'react'
 
 export      default function Layout({children}: {children: React.ReactNode}) {
 
     const router = useRouter();
-    const pathname = usePathname();
-    const [loggingOut, setLoggingOut] = useState(false);
+
     const isActive = (href: string) => 
     {
+        const pathname = usePathname();
         if(href =='/student')
         {
             return pathname == href;
@@ -21,27 +19,10 @@ export      default function Layout({children}: {children: React.ReactNode}) {
         return pathname?.startsWith(href);
     }
 
-     const handleLogout = async () => {
-    try {
-      setLoggingOut(true);
-
-      await api.post('/auth/logout');
-
-      router.push('/login');
-    } catch (error: any) {
-      console.error(
-        'Logout failed:',
-        error.response?.data || error.message
-      );
-
-      // Even if logout request fails,
-      // send user back to login
-      router.push('/login');
-    } finally {
-      setLoggingOut(false);
-    }
-  };
-
+    const handleLogout = () => {
+        localStorage.removeItem('access_token');
+        router.replace('/login');
+    };
   return (
         <ProtectedRoute role="student">
         <div className="min-h-screen bg-gradient-to-br from-[#f8f9ff] via-[#f7f8fc] to-indigo-50/60 text-[#20243a]">
