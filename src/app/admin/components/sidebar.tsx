@@ -5,9 +5,10 @@ interface SidebarProps {
   setActiveTab: (tab: 'dashboard' | 'users' | 'jobs' | 'applications') => void;
   onNewAdmin: () => void;
   onLogout: () => void;
+  loggingOut: boolean;
 }
 
-export default function Sidebar({ activeTab, setActiveTab, onNewAdmin, onLogout }: SidebarProps) {
+export default function Sidebar({ activeTab, setActiveTab, onNewAdmin, onLogout, loggingOut }: SidebarProps) {
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col justify-between bg-[#2f63d8] p-4 shadow-[8px_0_28px_-14px_rgba(30,64,175,0.45)]">
       <div>
@@ -88,12 +89,13 @@ export default function Sidebar({ activeTab, setActiveTab, onNewAdmin, onLogout 
 
         <button
           onClick={onLogout}
+          disabled={loggingOut}
           className="group flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium text-blue-100/90 transition-all duration-200 hover:bg-white/12 hover:text-white"
         >
           <svg className="w-5 h-5 shrink-0 text-blue-200 transition group-hover:text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
           </svg>
-          <span>Logout</span>
+          <span>{loggingOut ? 'Logging out...' : 'Logout'}</span>
         </button>
       </div>
     </aside>

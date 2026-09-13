@@ -68,6 +68,7 @@ export default function RecruiterDashboard() {
 
   const [activeTab, setActiveTab] = useState<'dashboard' | 'my-jobs'>('dashboard');
   const [loading, setLoading] = useState<boolean>(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const [myJobs, setMyJobs] = useState<Job[]>([]);
   const [allJobs, setAllJobs] = useState<Job[]>([]);
@@ -341,7 +342,9 @@ export default function RecruiterDashboard() {
         company: editJob.company.trim(),
         description: editJob.description.trim(),
         salary: Number(editJob.salary),
-        location: editJob.location.trim(),
+        ...(editJob.location.trim() && {
+          location: editJob.location.trim(),
+        }),
       };
 
       await api.patch(`/job/${editJob.id}`, payload, {
@@ -380,15 +383,23 @@ export default function RecruiterDashboard() {
     }
   }, [activeTab]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    router.push('/login');
+  const handleLogout = async () => {
+    try {
+      setLoggingOut(true);
+      await api.post('/auth/logout');
+      localStorage.removeItem('access_token');
+      router.push('/login');
+    } catch (error: any) {
+      console.error('Logout failed:', error.response?.data || error.message);
+    } finally {
+      setLoggingOut(false);
+    }
   };
 
   return (
     <ProtectedRoute role="recruiter">
     <div className="flex h-screen overflow-hidden bg-[#f4f7fb] text-slate-800 antialiased font-sans">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onPostJob={() => setShowCreateModal(true)} onLogout={handleLogout} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onPostJob={() => setShowCreateModal(true)} onLogout={handleLogout} loggingOut={loggingOut} />
       <main className="flex-1 h-full overflow-y-auto p-8 lg:p-10">
         <div className="flex items-center justify-between pb-8">
           <div>
@@ -839,10 +850,9 @@ export default function RecruiterDashboard() {
                   <label className="block text-xs font-semibold tracking-tight text-slate-700 mb-1">
                     Location
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={editJob.location}
+                    <input
+                      type="text"
+                      value={editJob.location}
                     onChange={(e) => setEditJob({ ...editJob, location: e.target.value })}
                     className="w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#3b28c8] transition"
                   />

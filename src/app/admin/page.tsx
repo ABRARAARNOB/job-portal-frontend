@@ -74,6 +74,7 @@ export default function AdminDashboard() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
+  const [loggingOut, setLoggingOut] = useState(false);
 
 
   const fetchDashboard = async () => {
@@ -181,9 +182,17 @@ export default function AdminDashboard() {
 
 
 
-  const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    router.push('/login');
+  const handleLogout = async () => {
+    try {
+      setLoggingOut(true);
+      await api.post('/auth/logout');
+      localStorage.removeItem('access_token');
+      router.push('/login');
+    } catch (error: any) {
+      console.error('Logout failed:', error.response?.data || error.message);
+    } finally {
+      setLoggingOut(false);
+    }
   };
 
 
@@ -195,7 +204,7 @@ export default function AdminDashboard() {
   return (
     <ProtectedRoute role="admin">
     <div className="flex h-screen overflow-hidden bg-[#f4f7fb] text-slate-800 antialiased font-sans">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onNewAdmin={() => router.push('/registration')} onLogout={handleLogout} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onNewAdmin={() => router.push('/registration')} onLogout={handleLogout} loggingOut={loggingOut} />
       <main className="flex-1 h-full overflow-y-auto p-8 lg:p-10">
         <div className="flex items-center justify-between pb-8">
           <div>
