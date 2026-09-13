@@ -4,11 +4,13 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import ProtectedRoute from '@/app/components/ProtectedRoute'
+import { api } from '@/lib/axios';
 
 export      default function Layout({children}: {children: React.ReactNode}) {
 
     const router = useRouter();
-
+    const pathname = usePathname();
+    const [loggingOut, setLoggingOut] = useState(false);
     const isActive = (href: string) => 
     {
         const pathname = usePathname();
