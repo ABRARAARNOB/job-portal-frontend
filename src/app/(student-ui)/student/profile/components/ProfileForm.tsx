@@ -26,11 +26,10 @@ export default function ProfileForm({
   onSave,
   saving,
 }: ProfileFormProps) {
-  const [name, setName] = useState(fullName || '');
+  const [name, setName] = useState(fullName || "");
   const [year, setYear] = useState(
     graduationYear?.toString() || '',
-);
-
+  );
   const [bioText, setBioText] = useState(bio || '');
 
   const handleSubmit = async (
@@ -40,7 +39,7 @@ export default function ProfileForm({
 
     await onSave({
       fullName: name,
-      graduationYear: year,
+      graduationYear: Number(year),
       bio: bioText,
     });
   };
@@ -91,7 +90,7 @@ export default function ProfileForm({
             <input
               id="email"
               type="email"
-              value={email ?? ''}
+              value={email}
               disabled
               className="w-full cursor-not-allowed rounded-lg border border-[#dedff0] bg-[#f6f6f9] px-4 py-3 text-sm text-[#777b91] outline-none"
             />
@@ -114,7 +113,7 @@ export default function ProfileForm({
               id="graduationYear"
               type="number"
               value={year}
-              onChange={(e) => setYear(Number(e.target.value))}
+              onChange={(e) => setYear(e.target.value)}
               placeholder="2026"
               min="2000"
               max="2100"
