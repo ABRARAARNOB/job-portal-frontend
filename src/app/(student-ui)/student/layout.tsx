@@ -13,7 +13,6 @@ export      default function Layout({children}: {children: React.ReactNode}) {
     const [loggingOut, setLoggingOut] = useState(false);
     const isActive = (href: string) => 
     {
-        const pathname = usePathname();
         if(href =='/student')
         {
             return pathname == href;
