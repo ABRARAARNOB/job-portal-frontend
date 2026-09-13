@@ -114,7 +114,7 @@ export default function ProfileForm({
               id="graduationYear"
               type="number"
               value={year}
-              onChange={(e) => setYear(e.target.value)}
+              onChange={(e) => setYear(Number(e.target.value))}
               placeholder="2026"
               min="2000"
               max="2100"
