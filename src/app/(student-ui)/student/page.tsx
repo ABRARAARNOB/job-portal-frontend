@@ -171,7 +171,7 @@ const formatStatus = (status: string) => {
           </div>
 
           {/* Table Rows */}
-          {applications.slice(0, 4).map((application) => (
+          {applications.slice(0, 10).map((application) => (
             <div
               key={application.id}
               className="grid grid-cols-4 items-center border-b px-5 py-4 text-sm"
