@@ -27,8 +27,8 @@ export default function ProfileForm({
   saving,
 }: ProfileFormProps) {
   const [name, setName] = useState(fullName || '');
-  const [year, setYear] = useState<number>(
-  graduationYear ?? 0
+  const [year, setYear] = useState(
+    graduationYear?.toString() || '',
 );
 
   const [bioText, setBioText] = useState(bio || '');
