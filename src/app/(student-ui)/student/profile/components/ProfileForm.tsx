@@ -10,9 +10,9 @@ interface ProfileFormProps {
   bio: string;
 
   onSave: (data: {
-    fullName: string;
-    graduationYear: number;
-    bio: string;
+    fullName?: string;
+    graduationYear?: number;
+    bio?: string;
   }) => Promise<void>;
 
   saving: boolean;
@@ -37,11 +37,30 @@ export default function ProfileForm({
   ) => {
     event.preventDefault();
 
-    await onSave({
-      fullName: name,
-      graduationYear: Number(year),
-      bio: bioText,
-    });
+    const updatedData: {
+      fullName?: string;
+      graduationYear?: number;
+      bio?: string;
+    } = {};
+    const trimmedName = name.trim();
+
+    if (trimmedName && trimmedName !== fullName.trim()) {
+      updatedData.fullName = trimmedName;
+    }
+
+    if (year && Number(year) !== graduationYear) {
+      updatedData.graduationYear = Number(year);
+    }
+
+    if (bioText !== bio) {
+      updatedData.bio = bioText;
+    }
+
+    if (Object.keys(updatedData).length === 0) {
+      return;
+    }
+
+    await onSave(updatedData);
   };
 
   return (

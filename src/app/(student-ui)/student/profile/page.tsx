@@ -14,6 +14,20 @@ interface User {
   bio: string;
 }
 
+interface ApiUserResponse {
+  data?: User;
+}
+
+type ProfileUpdate = Partial<
+  Pick<User, 'fullName' | 'graduationYear' | 'bio'>
+>;
+
+function unwrapUser(response: User | ApiUserResponse): User {
+  return 'data' in response && response.data
+    ? response.data
+    : response as User;
+}
+
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
 
@@ -30,9 +44,11 @@ export default function ProfilePage() {
         setLoading(true);
         setError('');
 
-        const response = await api.get('/auth/me');
+        const response = await api.get<ApiUserResponse | User>('/auth/me');
 
-        setUser(response.data);
+        // The API may return the user directly or inside a `data` wrapper.
+        // Always pass the actual user object to the form.
+        setUser(unwrapUser(response.data));
       } catch (error: any) {
         console.error(
           'Failed to load profile:',
@@ -52,11 +68,7 @@ export default function ProfilePage() {
   }, []);
 
   // Update profile
-  const handleSave = async (data: {
-  fullName: string;
-  graduationYear: number;
-  bio: string;
-}) => {
+  const handleSave = async (data: ProfileUpdate) => {
   if (!user) return;
 
   try {
@@ -69,7 +81,7 @@ export default function ProfilePage() {
       data,
     );
 
-    setUser(response.data.data);
+    setUser(response.data.data ?? response.data);
 
     setSuccess('Profile updated successfully.');
   } catch (error: any) {
