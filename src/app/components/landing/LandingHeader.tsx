@@ -6,7 +6,6 @@ export default function LandingHeader() {
     <header className="border-b border-[#e1e1ef] bg-white">
       <div className="mx-auto flex h-[74px] max-w-[1200px] items-center justify-between px-8">
         
-        {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2 text-lg font-bold text-[#4134d8]"
@@ -15,7 +14,6 @@ export default function LandingHeader() {
           <span>UniCareer</span>
         </Link>
 
-        {/* Navigation */}
         <nav className="flex items-center gap-10">
           <Link
             href="/"
@@ -24,15 +22,8 @@ export default function LandingHeader() {
             Home
           </Link>
 
-          <Link
-            href="/jobs"
-            className="text-sm text-[#555a72] transition hover:text-[#4134d8]"
-          >
-            Jobs
-          </Link>
         </nav>
 
-        {/* Authentication */}
         <div className="flex items-center gap-6">
           <Link
             href="/login"
@@ -42,7 +33,7 @@ export default function LandingHeader() {
           </Link>
 
           <Link
-            href="/register"
+            href="/registration"
             className="rounded-md bg-[#4134d8] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#3529bd]"
           >
             Register

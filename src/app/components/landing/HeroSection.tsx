@@ -23,7 +23,7 @@ export default function HeroSection() {
           </Link>
 
           <Link
-            href="/register"
+            href="/registration"
             className="rounded-md bg-[#4134d8] px-7 py-2.5 text-sm font-semibold text-white transition hover:bg-[#3529bd]"
           >
             Register
