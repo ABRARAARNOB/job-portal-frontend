@@ -54,7 +54,7 @@ export default function ProfilePage() {
   // Update profile
   const handleSave = async (data: {
   fullName: string;
-  graduationYear: string;
+  graduationYear: number;
   bio: string;
 }) => {
   if (!user) return;
@@ -69,7 +69,7 @@ export default function ProfilePage() {
       data,
     );
 
-    setUser(response.data.data ?? response.data);
+    setUser(response.data.data);
 
     setSuccess('Profile updated successfully.');
   } catch (error: any) {
