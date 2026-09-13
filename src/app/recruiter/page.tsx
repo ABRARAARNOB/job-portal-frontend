@@ -850,9 +850,9 @@ export default function RecruiterDashboard() {
                   <label className="block text-xs font-semibold tracking-tight text-slate-700 mb-1">
                     Location
                   </label>
-                    <input
-                      type="text"
-                      value={editJob.location}
+                  <input
+                    type="text"
+                    value={editJob.location}
                     onChange={(e) => setEditJob({ ...editJob, location: e.target.value })}
                     className="w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#3b28c8] transition"
                   />

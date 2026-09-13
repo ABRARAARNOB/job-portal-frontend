@@ -4,10 +4,12 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import ProtectedRoute from '@/app/components/ProtectedRoute'
+import { api } from '@/lib/axios'
 
 export      default function Layout({children}: {children: React.ReactNode}) {
 
     const router = useRouter();
+    const [loggingOut, setLoggingOut] = React.useState(false);
 
     const isActive = (href: string) => 
     {
@@ -19,9 +21,20 @@ export      default function Layout({children}: {children: React.ReactNode}) {
         return pathname?.startsWith(href);
     }
 
-    const handleLogout = () => {
-        localStorage.removeItem('access_token');
-        router.replace('/login');
+    const handleLogout = async () => {
+        try {
+            setLoggingOut(true);
+            await api.post('/auth/logout');
+            localStorage.removeItem('access_token');
+            router.replace('/login');
+        } catch (error: any) {
+            console.error(
+                'Logout failed:',
+                error.response?.data || error.message,
+            );
+        } finally {
+            setLoggingOut(false);
+        }
     };
   return (
         <ProtectedRoute role="student">
@@ -112,10 +125,11 @@ export      default function Layout({children}: {children: React.ReactNode}) {
                     <button
                         type="button"
                         onClick={handleLogout}
+                        disabled={loggingOut}
                         className='flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-blue-100/90 transition-all duration-200 hover:bg-white/12 hover:text-white'
                     >
                         <LogOut size={18} />
-                        Logout
+                        {loggingOut ? 'Logging out...' : 'Logout'}
                     </button>
                 </div>
                 
