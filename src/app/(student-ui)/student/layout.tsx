@@ -1,18 +1,17 @@
 'use client'
 import { BriefcaseBusiness, FileText, GraduationCap, LayoutDashboard, LogOut, Send, UserRound } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
-import { api } from '@/lib/axios';
+import { usePathname, useRouter } from 'next/navigation'
+import React from 'react'
+import ProtectedRoute from '@/app/components/ProtectedRoute'
 
-export default function Layout({children}: {children: React.ReactNode}) {
+export      default function Layout({children}: {children: React.ReactNode}) {
 
-    const pathname = usePathname();
-      const router = useRouter();
-      const [loggingOut, setLoggingOut] = useState(false);
+    const router = useRouter();
+
     const isActive = (href: string) => 
     {
+        const pathname = usePathname();
         if(href =='/student')
         {
             return pathname == href;
@@ -20,100 +19,81 @@ export default function Layout({children}: {children: React.ReactNode}) {
         return pathname?.startsWith(href);
     }
 
-    const handleLogout = async () => {
-    try {
-      setLoggingOut(true);
-
-      await api.post('/auth/logout');
-
-      // Go to login page
-      router.push('/login');
-
-    } catch (error: any) {
-      console.error(
-        'Logout failed:',
-        error.response?.data || error.message,
-      );
-
-      // Even if logout API fails, you can still redirect
-      router.push('/login');
-
-    } finally {
-      setLoggingOut(false);
-    }
-  };
-
-
+    const handleLogout = () => {
+        localStorage.removeItem('access_token');
+        router.replace('/login');
+    };
   return (
-    <div className=" bg-[#f7f7ff] text-[#20243a] min-h-screen">
+        <ProtectedRoute role="student">
+        <div className="min-h-screen bg-gradient-to-br from-[#f8f9ff] via-[#f7f8fc] to-indigo-50/60 text-[#20243a]">
 
-        <aside className='fixed left-0 top-0 h-screen w-[260px] border-r border-[#dedff0] bg-[#f1f2ff]'>
-            <div id="logo" className='px-6 py-7'>
-                <Link href="/student" className="text-xl font-bold tracking-tight text-[#4134d8] flex items-center gap-2">
+        <aside className='fixed left-0 top-0 h-screen w-[260px] bg-[#2f63d8] p-4 shadow-[8px_0_28px_-14px_rgba(30,64,175,0.45)]'>
+            <div id="logo" className='border-b border-white/15 px-3 pb-6 pt-3'>
+                <Link href="/student" className="flex items-center gap-2 text-xl font-bold tracking-tight text-white">
                     <GraduationCap size={29}/>
                     UniCareer
                 </Link>
             </div>
 
-            <div className='flex items-center gap-3 px-7 pb-8' id="profile">
-                <div className='h-10 w-10 rounded-full bg-[#d9d8ff] text-[#4134d8] flex items-center justify-center'>
+            <div className='flex items-center gap-3 px-3 pb-6 pt-5' id="profile">
+                <div className='flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white ring-1 ring-white/20'>
                     <UserRound size={20} />
                 </div>
 
                 <div >
-                    <p className="font-semibold text-sm text-[#292d43]">Student Portal</p>
-                    <p className='text-xs text-[#777b91]'>University Career Hub</p>
+                    <p className="text-sm font-semibold text-white">Student Portal</p>
+                    <p className='text-xs text-blue-100/80'>University Career Hub</p>
                 </div>
             </div>
 
-            <nav id="navigation" className='px-4'>
+            <nav id="navigation" className='px-0'>
                 <ul className='space-y-2'>
 
                     <li>
-                        <Link href="/student" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
+                        <Link href="/student" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                             isActive('/student')
-                            ? 'bg-[#5145e5] text-white'
-                            : 'text-[#555a72] hover:bg-white hover:text-[#4134d8]'
+                        ? 'rounded-lg bg-white text-[#2455c5] shadow-[0_5px_12px_-7px_rgba(15,23,42,0.45)]'
+                            : 'rounded-lg text-blue-50/90 hover:bg-white/12 hover:text-white'
                         }`}>
                             <LayoutDashboard size={20} />
                             <span>Dashboard</span>
                         </Link>
                     </li>
                     <li>
-                        <Link href="/student/jobs" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
+                        <Link href="/student/jobs" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                             isActive('/student/jobs')
-                            ? 'bg-[#5145e5] text-white'
-                            : 'text-[#555a72] hover:bg-white hover:text-[#4134d8]'
+                        ? 'rounded-lg bg-white text-[#2455c5] shadow-[0_5px_12px_-7px_rgba(15,23,42,0.45)]'
+                            : 'rounded-lg text-blue-50/90 hover:bg-white/12 hover:text-white'
                         }`}>
                             <BriefcaseBusiness size={19} />
                             <span>Browse Jobs</span>
                         </Link>
                     </li>
                     <li>
-                        <Link href="/student/applications" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
+                        <Link href="/student/applications" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                             isActive('/student/applications')
-                            ? 'bg-[#5145e5] text-white'
-                            : 'text-[#555a72] hover:bg-white hover:text-[#4134d8]'
+                        ? 'rounded-lg bg-white text-[#2455c5] shadow-[0_5px_12px_-7px_rgba(15,23,42,0.45)]'
+                            : 'rounded-lg text-blue-50/90 hover:bg-white/12 hover:text-white'
                         }`}>
                             <FileText size={19} />
                             <span>My Applications</span>
                         </Link>
                     </li>
                     <li>
-                        <Link href="/student/resume" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
+                        <Link href="/student/resume" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                             isActive('/student/resume')
-                            ? 'bg-[#5145e5] text-white'
-                            : 'text-[#555a72] hover:bg-white hover:text-[#4134d8]'
+                        ? 'rounded-lg bg-white text-[#2455c5] shadow-[0_5px_12px_-7px_rgba(15,23,42,0.45)]'
+                            : 'rounded-lg text-blue-50/90 hover:bg-white/12 hover:text-white'
                         }`}>
                             <FileText size={19} />
                             <span>My Resume</span>
                         </Link>
                     </li>
                     <li>
-                        <Link href="/student/profile" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
+                        <Link href="/student/profile" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                             isActive('/student/profile')
-                            ? 'bg-[#5145e5] text-white'
-                            : 'text-[#555a72] hover:bg-white hover:text-[#4134d8]'
+                        ? 'rounded-lg bg-white text-[#2455c5] shadow-[0_5px_12px_-7px_rgba(15,23,42,0.45)]'
+                            : 'rounded-lg text-blue-50/90 hover:bg-white/12 hover:text-white'
                         }`}>
                             <UserRound size={19} />
                             <span>Profile</span>
@@ -123,13 +103,17 @@ export default function Layout({children}: {children: React.ReactNode}) {
                 </ul>
             </nav>
 
-            <div id="botton-secton" className='bottom-0 absolute left-0 w-full px-5 pb-5'>
-                <Link href="/student/jobs" className='flex items-center gap-2 rounded-lg bg-[#4134d8] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#3529bd]'>
+            <div id="botton-secton" className='absolute bottom-0 left-0 w-full border-t border-white/15 px-4 pb-5 pt-5'>
+                <Link href="/student/jobs" className='flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-semibold text-[#2455c5] shadow-[0_6px_14px_-8px_rgba(15,23,42,0.45)] transition-all duration-200 hover:-translate-y-px hover:bg-blue-50 hover:shadow-lg'>
                     <Send size={16} />
                     Submit Application
                 </Link>
-                <div className='mt-6 border-t border-[#d8d9eb] pt-4'>
-                    <button onClick={handleLogout} className='flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#65697d] transition hover:bg-white hover:text-[#4134d8]'>
+                <div className='mt-4 pt-1'>
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        className='flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-blue-100/90 transition-all duration-200 hover:bg-white/12 hover:text-white'
+                    >
                         <LogOut size={18} />
                         Logout
                     </button>
@@ -139,11 +123,12 @@ export default function Layout({children}: {children: React.ReactNode}) {
 
         </aside>
 
-        <main className="ml-[260px] min-h-screen border-2 border-amber-50">
-            <div className="border-2 border-amber-700 max-w-[1500px] mx-auto px-10 py-8 ">
+        <main className="ml-[260px] min-h-screen">
+            <div className="max-w-[1500px] mx-auto px-10 py-8">
                 {children}
             </div>
         </main>
     </div>
+        </ProtectedRoute>
   )
 }
